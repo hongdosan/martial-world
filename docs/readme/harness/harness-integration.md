@@ -31,7 +31,9 @@
 - **진화 가능성**: 사용자 피드백을 변경 이력에 누적, 일정 조건에서 자동 진화 트리거 발동
 - **스킬-에이전트 분리**: "스킬 = 어떻게 / 에이전트 = 누가"
 
-### 1.2 8 Phase 워크플로우 (Phase 0–7)
+### 1.2 8 Phase 워크플로우 (Phase 0–7) — *하네스 자체* Phase
+
+> ⚠️ 이 Phase 0-7 은 **하네스 도구의 워크플로우** 다. 천기망 *BE 표준 정의 사이클* 의 Phase 6-13 (2026-05-01 ~ 2026-05-06) 과는 별개의 번호 체계. 후자는 [`harness-state.md`](harness-state.md) 변경 이력 참조.
 
 | Phase | 역할 | 산출물 |
 |-------|------|--------|
@@ -52,23 +54,23 @@
 
 | 영역 | 담당 | 근거 |
 |------|------|------|
-| **BE 스킬·기술 스택·아키텍처** | 사용자 직접 정의 | 사용자가 BE 방향성을 직접 제시 |
+| **BE 표준·아키텍처·에이전트** | **하네스 자동 (방향성은 사용자)** | Phase 6-13 사이클 완료 (2026-05-01 ~ 2026-05-06). BE 표준 본문은 SSOT [`be_reference_prompt.md`](../../../.private-config/shared/prompt/read_only/backend/be_reference_prompt.md) *(private)* 단일 출처. 사이클 누적 결정 이력은 [`harness-state.md`](harness-state.md) 변경 이력 참조 |
 | **FE 스택·아키텍처·에이전트** | 이미 결정 (변경 없음) | `fe_reference_prompt.md` SSOT 완성, `agent-frontend.md` / `agent-frontend-reviewer.md` 작성 완료 |
-| **그 외 에이전트 / 스킬** | 하네스 자동 생성 | 테스터 · 코디네이터 · 도메인 분석 · 기타 횡단(cross-cutting) 에이전트 |
+| **그 외 에이전트 / 스킬** | 하네스 자동 생성 | 테스터 (`agent-fe-tester` 등) · 통합 코디네이터 · 도메인 분석 · 기타 횡단(cross-cutting) 에이전트 |
 
-> **분담의 의미**: BE/FE 의 *도메인 지식* 은 사람이 결정하고, 그 외 *프로세스·검증·조율* 영역만 하네스로 자동화한다.
+> **분담의 의미 (2026-05-01 갱신)**: BE/FE 의 *방향성* 만 사용자가 결정하고, 표준 / 아키텍처 / 에이전트 / SSOT 의 *세부 설계* 는 하네스로 자동화한다.
 
 ### 2.1 하네스 대상 (현 시점 매트릭스)
 
 | 에이전트 | 현 상태 | 도입 방식 |
 |---------|--------|----------|
-| `agent-backend.md` | 골격 | **사용자 정의** (BE 영역) |
-| `agent-backend-reviewer.md` | 미작성 | **사용자 정의** (BE 영역) |
+| `agent-backend.md` | **완성** (2026-05-01 BE 사이클) | **하네스** (방향성은 사용자) |
+| `agent-backend-reviewer.md` | **완성** (2026-05-01 BE 사이클 신규) | **하네스** (방향성은 사용자) |
 | `agent-frontend.md` | 완성 | 변경 없음 |
 | `agent-frontend-reviewer.md` | 완성 | 변경 없음 |
-| `agent-game-master.md` | 완성 (게임 도메인) | 변경 없음 |
-| `agent-tester.md` | 미작성 | **하네스** |
-| `agent-reviewer.md` (코디네이터) | 미작성 | **하네스** (BE/FE 양측 합류 후) |
+| `agent-game-master.md` | 완성 (게임 도메인) | 변경 없음 (사용자 직영 트랙) |
+| `agent-tester.md` (FE 시범) | 미작성 | **하네스** (별도 트랙 — `agent-fe-tester` 시범 생성 예정) |
+| `agent-reviewer.md` (통합 코디네이터) | 미작성 | **하네스** (BE/FE 리뷰어 분담 운영 중 — 향후 도입 검토) |
 | 도메인 분석 / 리서치 / 스파이크 | 미정 | **하네스** |
 
 ---
@@ -146,6 +148,18 @@
 | `.claude/agents/{name}.md` | `.private-config/claude/claude-agents/{name}.md` | symlink 통해 `.claude/agents/` 노출 |
 | `.claude/skills/{name}/SKILL.md` | `.private-config/claude/claude-skills/{name}/SKILL.md` | **신규 디렉토리** — Phase 1 도입 시 결정 |
 | `_workspace/{phase}_{agent}_{artifact}.{ext}` | `.private-config/shared/prompt/_workspace/...` 또는 `prompt/plan/<topic>/_workspace/...` | **위치 결정 보류** — Phase 2 시점에 확정 |
+
+**BE 산출물 위치 (2026-05-01 BE 사이클 후 추가)**:
+
+| 산출물 | 위치 |
+|---|---|
+| BE 코디네이터 / 리뷰어 | `.private-config/claude/claude-agents/agent-backend{,-reviewer}.md` |
+| BE 단일 기준점 (SSOT) | `.private-config/shared/prompt/read_only/backend/be_reference_prompt.md` |
+| BE 작업 템플릿 | `.private-config/shared/prompt/read_only/backend/be_{develop,improvement,review}_prompt.md` |
+| BE 아키텍처 공개 가이드 | `docs/readme/be-architecture.md` (FE 와 대칭) |
+| BE 멀티 모듈 가이드 | `docs/readme/be-multimodule-guide.md` (Gradle Groovy DSL settings.gradle / build.gradle 예시 포함) |
+| BE 트리거 등록 | `.private-config/claude/CLAUDE.md` §백엔드 개발 |
+| BE 코드 위치 (도메인 설계 사이클 후) | `backend/` 하위 멀티 모듈 — 상세 구조는 [`be-architecture.md`](../be-architecture.md) + [`be-multimodule-guide.md`](../be-multimodule-guide.md) (실무 가이드) 단일 출처 참조 |
 
 ### 4.2 명명 규칙 (천기망 기존 패턴 우선)
 

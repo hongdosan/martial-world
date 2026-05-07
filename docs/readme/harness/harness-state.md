@@ -49,22 +49,22 @@
 
 | 에이전트 | 상태 | 분량 |
 |---------|------|------|
-| `agent-backend.md` | 골격 | 1,634 B / 46행 |
+| `agent-backend.md` | **완성** (BE 사이클 본문 채움) | ~14 KB / 391행 |
 | `agent-frontend.md` | 완성 | 11,257 B / ~250행 |
 | `agent-game-master.md` | 완성 (게임 도메인) | 21,515 B |
 | `agent-frontend-reviewer.md` | 완성 | 8,450 B / 159행 |
-| `agent-backend-reviewer.md` | 미작성 | — |
-| `agent-reviewer.md` (코디네이터) | 미작성 | — |
-| `agent-tester.md` | 미작성 | — |
+| `agent-backend-reviewer.md` | **완성** (BE 사이클 신규) | ~10 KB / ~200행 |
+| `agent-reviewer.md` (통합 코디네이터) | 미작성 | — (BE/FE 리뷰어 분담으로 운영, 향후 도입 검토) |
+| `agent-tester.md` | 미작성 | — (harness 시범 생성 예정 — `agent-fe-tester` 별도 트랙) |
 
-작성률: 4/7 (57%) — `agent-backend.md` 본문이 빈 골격이므로 실질 3.5/7 (50%).
+작성률: 5/7 (71%) — BE 사이클 (2026-05-01) 으로 `agent-backend.md` 본문 + `agent-backend-reviewer.md` 신규 추가.
 
 ### SSOT 완성도
 
 | 문서 | 완성률 |
 |------|--------|
 | `fe_reference_prompt.md` | 91% (10/11 섹션) |
-| `be_reference_prompt.md` | 42% (5/12 섹션, 나머지 placeholder) |
+| `be_reference_prompt.md` | **100%** (14/14 섹션 — BE 사이클 2026-05-01 + **매트릭스 v3 정정 사이클 2026-05-03**: §1 TBD 4건 채움 + §2.3 매트릭스 v3 (infra 정의 좁힘 + AOP/Auditing/DataSource 재배치) + §2.4 D1-D5 신규 5패턴 (CQRS Port / Port 반환 도메인 모델 / adaptor 비즈니스 로직 금지 / Validator 3패턴 / infra 서브도메인별 소유) + §4-10 placeholder 7개 + §13 변경 이력) |
 
 ### 자동 강제 메커니즘
 
@@ -87,8 +87,11 @@
 | Tailwind CSS | 의존성 0 | ❌ |
 | TypeScript Strict | `strict: true` | ✅ |
 | FSD 레이어 | `processes/` 미사용, 나머지 존재 | △ |
+| `frontend/` 디렉토리 | 천기망 root 직속 (`src/`, `package.json` 등) | ❌ — 모노레포 구조 결정 (2026-05-01) 후 `frontend/` 이전 별도 사이클 |
+| `backend/` 디렉토리 | 미존재 | △ — 표준 확정 (2026-05-01), 도메인 설계 사이클 후 첫 모듈 생성 |
+| Java / Spring Boot / MariaDB / Liquibase / Testcontainers / ArchUnit | 미설치 | ❌ — 표준 확정 (2026-05-01), 도입 예정 |
 
-5개 핵심 항목 중 1개 완전 일치 (20%).
+5개 핵심 FE 항목 중 1개 완전 일치 (20%). BE 항목 모두 *표준 확정 후 도입 예정* 단계.
 
 ## 비판적 사실 분석
 
@@ -115,9 +118,9 @@
 |------|------|
 | 설계 | 도입 완료 (12개 요소 모두 정의) |
 | FE 사이클 | 표준-에이전트-리뷰어까지 닫힌 루프 |
-| BE 사이클 | 골격 단계 |
-| 강제력 | LLM 순응 의존 (TS Strict 외 자동화 0) |
-| 표준-코드 정합 | 20% (1/5) |
+| BE 사이클 | **표준-에이전트-리뷰어 닫힌 루프** (Phase 6-13 통합 완료, 2026-05-01 ~ 2026-05-06). 표준 본문은 SSOT [`be_reference_prompt.md`](../../../.private-config/shared/prompt/read_only/backend/be_reference_prompt.md) *(private)* 단일 출처. 첫 도메인 모듈 3-sub 생성은 도메인 설계 사이클 후 |
+| 강제력 | LLM 순응 의존 (TS Strict 외 자동화 0). BE 코드 도입 시 ArchUnit + Gradle 의존성 검증 task 작동 예정 (표준 정의는 Phase 6-13 사이클로 완료됨) |
+| 표준-코드 정합 | FE 20% (1/5), BE 0% (표준만 확정, 코드 미존재) |
 
 천기망 하네스는 **설계 차원에서 도입 완료된 문서 기반 프로세스 하네스**다. 다음 강화 우선순위는:
 
@@ -126,7 +129,7 @@
 3. **표준-코드 정합화** — CRA → Vite 마이그레이션, TanStack Query / Tailwind CSS 도입
 4. **자동 강제 도입** — `eslint-plugin-boundaries` (FSD 레이어 lint), `husky` + `lint-staged` (pre-commit), PR 템플릿에 리뷰 체크리스트 박기
 
-> **BE 사이클 완료** — 현 사이클에서 보류. 사용자가 BE 방향성(스킬·기술 스택·아키텍처)을 직접 정의 예정. 그 전까지는 BE placeholder 유지.
+> **BE 사이클 완료** — Phase 6-13 사이클로 표준-에이전트-리뷰어 닫힌 루프 형성 (2026-05-01 ~ 2026-05-06). 첫 도메인 모듈 3-sub 생성은 도메인 설계 사이클 후. 변경 이력 표 참조.
 
 ## 변경 이력 (Change History)
 
@@ -168,8 +171,21 @@ harness Phase 7 패턴을 차용한 변경 이력. 모든 진화 변경은 *날�
 | 2026-04-30 | A 사이클 — 미점검 영역 보강 (메인 `README.md` LICENSE 헤더 / `scripts/init-private.sh` LICENSE 주석) + LICENSE 파일 점검 (실질 결함 없음, `©` vs `(c)` 미세 표기 차이는 별도 사이클로 분리) | `README.md` (L7) · `scripts/init-private.sh` (L4) · `LICENSE` (점검만) | 옵션 A 표준의 적용 범위를 *프로젝트 root 진입점* 까지 확장 — 협업자가 처음 보는 README/스크립트도 일관 표기 |
 | 2026-05-01 | `architecture.md` → **`fe-architecture.md`** rename — 명명 일반/특정 정합 | 본 파일 (rename) + 7개 인용 위치 일괄 정정 (메인 `README.md` L58 · `env-var-convention.md` L212 · `docs/readme/README.md` L12 · `handoff/README.md` ×2 · `harness-state.md` ×2 자체 변경 이력) | 본문이 *FE 한정* (FSD/Vite/TanStack/Tailwind) 인데 명칭이 *전체 아키텍처* 같은 인상 → BE 합류 시 명명 충돌 우려. `fe-architecture.md` 로 명명하여 향후 `be-architecture.md` 대칭 확보 |
 | 2026-05-01 | BE 표준 정의 사이클 핸드오프 작성 — 별도 세션 진행 결정 | `docs/readme/handoff/2026-05-01-be-harness-trigger.md` (하네스 호출 입력) + `docs/readme/handoff/2026-05-01-be-harness-cycle.md` (Tier 2 핸드오프) | 사용자 결정 — "이 모든 건 하네스가 직접 설계한다". 분담 매트릭스 변경 (BE: 사용자 직영 → 하네스 자동, 방향성은 사용자). 사이클 변경량이 매우 클 것으로 예상되어 별도 세션으로 분리 |
+| 2026-05-01 | **BE 표준 정의 사이클 실행** — 9 Phase 완료. 사용자 결정 6항목 (멀티 모듈 분리=혼합 / 횡단 관심사=매트릭스 v2 / BDD=JUnit5+AssertJ / DB 마이그레이션=Liquibase / 진입점 모듈=`app` / 통합 테스트=Testcontainers MariaDB) + 보조 정정 1건 (Gradle DSL: Kotlin → **Groovy** — Java only 컨벤션 친화). 모노레포 구조 결정 (`backend/` + `frontend/`) — FE 디렉토리 이전은 별도 사이클 신규 발의. 보안 정책 = 미정 placeholder (추후 사이클) | 산출물 11종: `agent-backend.md` (골격 47행 → 본문 391행) + `agent-backend-reviewer.md` (신규 ~200행) + `be_reference_prompt.md` (§1 TBD 4건 + §2 매트릭스 v2 + §4-10 placeholder 7개 + §13 변경 이력) + `be_{develop,improvement,review}_prompt.md` (영향 범위 / DoD / 리뷰 체크리스트 보강) + `docs/readme/be-architecture.md` (신규) + `docs/readme/be-multimodule-guide.md` (신규 — Groovy DSL 예시 + buildSrc convention plugin + ArchUnit 룰 + 도메인 추가 절차) + `.private-config/claude/CLAUDE.md` (BE 위임 본문 보강) + 본 문서 (인벤토리·정량 측정값·결론·변경 이력) | 사용자 결정 — "이 모든 건 하네스가 직접 설계한다" (방향성은 사용자, 세부는 하네스). 천기망 BE 가 *문서 기반 프로세스 하네스* 로 닫힌 루프 형성 |
+| 2026-05-01 | 모노레포 구조 결정 → **FE 디렉토리 이전 사이클 신규 발의** | 별도 사이클 산출물 (본 사이클 미포함) — `src/`, `public/`, `package.json`, `tsconfig.json` 등 root 직속 → `frontend/` 하위 이전. `fe-architecture.md` / `fe_reference_prompt.md` / `agent-frontend.md` / `agent-frontend-reviewer.md` / 메인 `README.md` / `private-config.md` / `env-var-convention.md` / root 빌드 명령 / `.gitignore` / `.claude/CLAUDE.md` 등 경로 인용 일괄 갱신 대상 | BE 사이클의 모노레포 구조 결정 (`backend/` + `frontend/`) 으로 FE 디렉토리 이전 필요. 본 사이클은 BE 한정이라 FE 이전은 별도 트랙으로 분리 |
+| 2026-05-01 | 참고안 3개 사용자 직접 제거 + 핸드오프 2종에 STATUS 헤더·체크박스 갱신 | `.claude/1_백엔드_아키텍처_참고_문서.md` (제거) + `.claude/2_백엔드_아키텍처_참고_문서.md` (제거) + `.claude/3_백엔드_아키텍처_참고_문서.md` (제거) + `docs/readme/handoff/2026-05-01-be-harness-cycle.md` (STATUS + Open Work 갱신) + `docs/readme/handoff/2026-05-01-be-harness-trigger.md` (STATUS + 사이클 후 처리 체크박스 갱신) | BE 사이클 종료 후 사용자 결정 — 본 사이클 산출물 어디에도 인용 링크 없어 dead link 위험 없이 안전 제거. 핸드오프 2종은 *역사 기록* 차원에서 유지하되 STATUS 헤더로 사이클 종료 명시 |
+| 2026-05-01 | **FE 디렉토리 이전 + 기본 프로젝트 구조 셋팅 = 다음 세션 진행 결정** (사용자 결정) | 본 사이클은 BE 한정 — FE 이전은 별도 세션 핸드오프 작성 + 새 트리거 프롬프트 + 영향 범위 큰 작업 (FE SSOT 4종 / FE 에이전트 2종 / docs 6종 + 메인 README / package.json 위치 / tsconfig 경로 / .gitignore) | 사용자 결정 — 본 사이클 변경량 이미 큼. FE 이전은 영향 범위가 또 다른 사이클 분량이라 분리 |
+| 2026-05-03 | **매트릭스 v2 → v3 정정 사이클** — `<domain>:infra` 정의 좁힘 (외부 시스템 통신 코드 *전용*) + AOP 도메인별 공통 횡단 / DataSource·EntityManagerFactory bean / `@EnableJpaAuditing`·JpaAuditingConfig / DataSourceConfig 류 → `<domain>:infra` 에서 **`app` (모듈 공용)** 으로 재배치 + FeignClient·Mapper·Liquibase 위치 명시 + RestTemplate 금지 | 본 사이클 정정 8파일: `be_reference_prompt.md` (§2.3 매트릭스 v3 + §2.4 D1-D5 신규 + §13 변경 이력) + `agent-backend.md` (§2.3 패키지 트리 + §2.4 매트릭스 + §3 도메인 규칙 §3.6-§3.9 신규) + `agent-backend-reviewer.md` (§2.2 매트릭스 v3 + §2.2A D1-D5 카테고리) + `be_review_prompt.md` (D1-D5 체크리스트) + `be_develop_prompt.md` / `be_improvement_prompt.md` (DoD D1-D5 항목) + `be-architecture.md` (매트릭스 v3 + D1-D5 표) + `be-multimodule-guide.md` (infra build.gradle 의존성 + 패키지 트리 + app build.gradle AOP/Liquibase/Validation 추가) + 본 문서 (인벤토리·정량 측정값·변경 이력) | **사용자 정정** — "infra 에 공통이 들어간다는 잘못된 정보". 새 참고 문서 (`.claude/백엔드_참고용_문서.md`) 기준으로 `<domain>:infra` = 외부 시스템 *통신 코드 전용*, 횡단 설정·도구 설정 = `app` (모듈 공용 진입점, 외부 참고 문서의 `config/` 패키지와 등가). 추가 5개 패턴 (D1-D5: CQRS Port / Port 반환 도메인 / adaptor 금지 / Validator 3패턴 / infra 서브도메인별 소유) 도 함께 보강 |
+| 2026-05-03 | **모듈 분리 4-sub → 3-sub 정정 사이클** — `:<domain>:adapter-inbound` + `:<domain>:adapter-outbound` 별도 모듈 → `:<domain>:adapter` 단일 모듈 + 내부 `inbound/`·`outbound/` 패키지 분리. 도메인 N=6 가정 시 모듈 수 25 → 19. inbound ↛ outbound / inbound ↛ infra 차단은 ArchUnit 패키지 룰로 보강 (Gradle 차원 차단 대신) | 본 사이클 정정 9파일: `agent-backend.md` (§0·§2.1·§2.2·§2.3·§2.4·§3·§4·§7.4·§10) + `agent-backend-reviewer.md` (§2.1·§2.2·§2.7·§3·§4) + `be_reference_prompt.md` (§2.1·§2.2·§2.3·§3·§13 변경 이력) + `be_{develop,improvement,review}_prompt.md` (모듈 표기 + DoD + 체크리스트) + `be-architecture.md` (모듈 트리·의존성·매트릭스) + `be-multimodule-guide.md` (settings.gradle / 의존성 / `:<domain>:adapter/build.gradle` 통합 + ArchUnit 룰 강화 + 도메인 추가 절차 3-sub 화) + `.claude/CLAUDE.md` (모노레포 구조 표기 + 변경 이력) + 본 문서 (변경 이력) + harness-integration.md (§2 BE 행 본문) | 사용자 합리적 의문 제기 — "adapter 가 adapter 모듈 내부에 inbound/outbound 패키지가 있는 것이 아닌, inbound/outbound 모듈이 분리된 이유?". 검토 결과 새 참고 문서 (`.claude/백엔드_참고용_문서.md`) 와 산업 관행이 *3-sub* 패턴이며, 4-sub 의 *Gradle 차원 strict 강제* 는 *통상 발생하지 않을 위반* 을 막기 위한 과도한 보험으로 판단. 3-sub + ArchUnit 보강으로 충분 |
+| 2026-05-06 | **JPA 설정 위치 일관화 사이클** (Phase 13) — DataSource bean / JPA properties / `@EnableJpaAuditing` / JpaAuditingConfig (Auditor) 위치를 `app` → `<domain>:infra/jpa/` 로 이동. *JPA = infra* 완전 일관. 도메인별 DataSource (URL = `jdbc:mariadb://host:3306/martialarts_<domain>`) + 도메인별 HikariCP 풀. Phase 12 의 *단일 DataSource (no default DB)* 결정을 *도메인별 DataSource* 로 갱신. MSA 전환 시 도메인 모듈 그대로 분리 | 본 사이클 정정 9파일: `be_reference_prompt.md` (§2.3·§5.3·§13) + `agent-backend.md` (§2.3·§2.4) + `agent-backend-reviewer.md` + `be_{develop,review}_prompt.md` + `be-architecture.md` + `be-multimodule-guide.md` (`<domain>:infra/build.gradle` JPA 의존 + 패키지 트리) + `.claude/CLAUDE.md` (변경 이력) + 본 문서 + `harness-integration.md` | 사용자 지적 — "JPA 설정은 infra 영역 아냐?". 매트릭스 v3 의 JPA 분산 (app 일부 / infra 일부) 일관성 의문 정당. Phase 7 *횡단 = app* 진짜 의도는 *AOP 같은 횡단 정정* — JPA 는 *외부 시스템 연결 자체* 라 infra 가 자연스러움 |
+| 2026-05-06 | **DB 스키마 분리 사이클** (Phase 12) — (1) 단일 MariaDB instance + 도메인별 database (`martialarts_<domain>`). (2) DataSource = 단일 (no default DB), `jdbc:mariadb://host:3306/`. (3) 도메인별 EntityManagerFactory + `hibernate.default_catalog = martialarts_<domain>` + `@Table(catalog="martialarts_<domain>")`. (4) Liquibase = 도메인별 자체 master + Bean (각 database 독립 마이그레이션). (5) 테이블 명명 prefix 부재 (database 가 namespace). (6) cross-database JOIN·트랜잭션 금지 (이벤트/saga 권장). (7) ArchUnit 룰: entity catalog 일치 / cross-database query 금지. (8) MSA 전환 시: database 단위 dump/restore 만으로 분리 | 본 사이클 정정 9파일: `be_reference_prompt.md` (§2.0·§5.1-§5.4·§13) + `agent-backend.md` (§1·§2.4·§3.4) + `agent-backend-reviewer.md` (§DB 스키마 분리 체크리스트) + `be_{develop,improvement,review}_prompt.md` (DB 영역) + `be-architecture.md` (구조도·DB 영역·§DB 스키마 분리 신규) + `be-multimodule-guide.md` (도메인 추가 절차에 database 생성 / EntityManagerFactory + catalog / ArchUnit 룰) + `.claude/CLAUDE.md` (모노레포 구조 + 변경 이력) + 본 문서 (변경 이력) + `harness-integration.md` (§2 BE 행) | 사용자 결정 — "디비는 하나지만 스키마는 분리" → 옵션 2 채택 (단일 instance + 도메인별 database). MSA 전환 비용 최소화 + *수술적 분리* 강제 + 도메인 격리 물리적 강화 |
+| 2026-05-06 | **모듈러 모놀리스 + BFF 통합 사이클** (Phase 11) — (1) **4축 정의 명시** (멀티모듈 + 헥사고날 + 모듈러 모놀리스 + BFF — *Modular Monolith* 는 *Monolith* 와 다름, 단일 배포·단일 DB *지만* 도메인 모듈 명확 분리 + 미래 수술적 분리 가능). (2) `:app` 의 책임 = *Composition Root + 전사 횡단 + 게이트웨이 + BFF* 통합 (별도 `:bff` 모듈 불요 — 사용자 합리적 지적: "`:app` 이 게이트웨이 역할이 아닌가?"). (3) BFF 위치 = `:app/.../bff/{controller,assembler,dto}/` 패키지. (4) BFF 호출 대상 = 도메인의 Inbound Port (Handler) *직접 인메모리 호출* (FeignClient·HTTP 아님). (5) BFF 금지 = 비즈니스 로직·DB 직접 접근·`<domain>:adapter`/`<domain>:infra` 직접 의존·internaladaptor 사용. (6) ArchUnit 룰 추가 = `bff` 패키지가 `domain.port.inbound` 만 의존, `..adapter..`·`..infra..` 의존 금지. 모듈 수 변경 X (`3N+1+K` 유지) | 본 사이클 정정 10파일: `be_reference_prompt.md` (§2.0 4축 정의 + §2.1 비협상 원칙 + §13 변경 이력) + `agent-backend.md` (§0·§1·§2.3·§2.4) + `agent-backend-reviewer.md` (§2 BFF 체크리스트) + `be_{develop,improvement,review}_prompt.md` (영향 범위·DoD·체크리스트의 BFF 항목) + `be-architecture.md` (§4축 정의 + §아키텍처 구조도 + §BFF 신규 + 목차) + `be-multimodule-guide.md` (`app/build.gradle` BFF 의존 영역 주석 + ArchUnit 룰 BFF 2개 추가) + `.claude/CLAUDE.md` (모노레포 구조 4축 + 변경 이력) + 본 문서 (변경 이력 + 결론) + `harness-integration.md` (§2 BE 행 + §4.1 BE 코드 위치) | 사용자 *통합 아키텍처 가이드 도입* — "모듈러 모놀리스 + 헥사고날 + BFF" 채택. 합리적 지적 ("`:app` 이 게이트웨이 역할이 아닌가?") 으로 BFF 별도 모듈 불요, `:app` 안 패키지로 통합. *모놀리스 ≠ 모듈러 모놀리스* 차이 강조 |
+| 2026-05-06 | **common 용어 제거 정정 사이클** — `:<common-N>` placeholder + 예시 `common-spring`/`common-test`/`common-time` → `:<role>` 책임명 직접 (예: `:spring-support`, `:test-fixtures`, `:time-util`). 영문 `common-*` 접두사가 *모든 모듈에서 사용 가능* 으로 오해 야기 → 책임명 직접 표기 강제. 한국어 *공통 모듈* 일부는 *라이브러리 모듈* / *공유 책임* 으로 갱신 (정책명 *공통 모듈 정책* 은 인용 정합성 위해 유지) | 본 사이클 정정 9파일: `agent-backend.md` (§1·§2.1·§2.4) + `agent-backend-reviewer.md` (§2.2·§2.7) + `be_reference_prompt.md` (§2.1·§2.2·§2.3·§7·§13) + `be_{develop,improvement}_prompt.md` (영향 범위) + `be-architecture.md` (모듈 트리·매트릭스·정책 표) + `be-multimodule-guide.md` (settings.gradle / 의존성 표 / ArchUnit 룰 / 도메인·라이브러리 모듈 추가 절차 + §섹션명 정정) + `.claude/CLAUDE.md` (모노레포 구조 + 변경 이력) + 본 문서 (변경 이력) + harness-integration.md (§2 + §4.1) | 사용자 정정 — "common 명칭이 들어가면 모두 사용 가능하다고 오해할 수 있음". 영문 `common-*` 모듈명 일괄 제거, 책임명 직접 표기로 명확성 확보 |
+| 2026-05-06 | **공통 모듈 정책 최종 정의 + `:core` 신규 도입 사이클** — (1) `:core` (기본 공통 모듈) = 순수 Java 유틸·generic 타입, 의존 0. (2) **책임별 별도 공통 모듈** 도입 가능 (core 가 책임 못 지는 영역 — `:<common-N>`). (3) **선택적 의존 (라이브러리 형식)** — 모든 모듈이 의존 X, 필요한 모듈만. (4) **공통 모듈 → 다른 모듈 의존 금지** (단방향, ArchUnit 강제). (5) **공통 모듈 내부 스파게티 금지** — SRP 엄격. "공통 모듈 금지" 원칙은 *도메인/framework 결합 공통* 에 한정. 도메인 N=6 + 공통 K=1 시 모듈 수 19→20 (`3N+1+K`) | 본 사이클 정정 11파일: `be_reference_prompt.md` (§2.1·§2.2·§2.3·§7·§13) + `agent-backend.md` (§0·§1·§2.1·§2.2·§2.4) + `agent-backend-reviewer.md` (§2.1·§2.2·§2.7) + `be_{develop,improvement,review}_prompt.md` (영향 범위·DoD·체크리스트의 공통 모듈 표기) + `be-architecture.md` (모듈 트리·의존성·매트릭스 + §공통 모듈 정책 신규 + 목차) + `be-multimodule-guide.md` (settings.gradle 에 :core 추가 + `:core/build.gradle` 신규 + 의존성 표 + ArchUnit 룰 강화 (core 의존 0 / JDK 외 import 금지) + 공통 모듈 추가 절차 §신규) + `.claude/CLAUDE.md` (모노레포 구조 + 변경 이력) + 본 문서 (변경 이력 + 결론) + `harness-integration.md` (§2 BE 행 + §4.1 BE 코드 위치) | 사용자 *최종 정의* (2026-05-06) — "core 모듈은 모든 모듈이 가지고 있지 않으며 필요한 도메인에서만 갖는 라이브러리 형식. core 로 둘 수 없는 공통은 또 다른 공통 모듈. 공통 책임을 가진 모듈 내부에서 스파게티 코드가 만들어지면 안됨". 이전 *공통 모듈 금지* 원칙은 *도메인/framework 결합* 공통 모듈에 한정 — 책임별 분리 + 선택적 의존 + SRP + 단방향 = 헥사고날 + DDD 정합 |
 
-> 다음 진화 트리거: BE 표준 정의 사이클 종료 후 인벤토리·정량 측정값 표 + 분담 매트릭스 (`harness-integration.md §2`) 일괄 갱신. `agent-fe-tester` 시범 생성은 BE 사이클 후 또는 병행 트랙으로 별도 진행.
+| 2026-05-07 | **BE 문서 11종 정합성 정정 사이클** — (1) Critical 자체 모순 제거: `be_review_prompt.md` / `agent-backend-reviewer.md` / `be-architecture.md` / `be_reference_prompt.md` / `agent-backend.md` 의 *Phase 13 잔재* (`app` 표기 / "단일 DataSource 금지") 를 모두 `<domain>:infra/jpa/` 일관·"도메인별 DataSource 필수" 로 정정. (2) SSOT 단일화: `CLAUDE.md` / `harness-integration.md` / `harness-state.md` 의 BE 표준 본문 ~150자 자구 중복 → SSOT (`be_reference_prompt.md`) 단일 출처 포인터로 압축. (3) 역할 경계: `be-multimodule-guide.md` 표현 통일 ("자체 database" → "도메인 전담 database"). (4) `harness-integration.md` 의 *하네스 Phase 0-7* vs *BE 사이클 Phase 6-13* 구분 1줄 명시. (5) 3 prompt (`be_{develop,improvement,review}_prompt.md`) 의 DoD/체크리스트에 SSOT § 번호 인용 보강. (6) `harness-state.md` 의 "ArchUnit 도입 예정" / "4-sub" 구식 문구 갱신 | 본 사이클 정정 11파일: `be_reference_prompt.md` (§2.1·§2.3 본문 정의 + 매트릭스 + 금지 통합) + `agent-backend.md` (§0·§2.4 매트릭스 일관성) + `agent-backend-reviewer.md` (§2.2 매트릭스·§2.6 DB) + `be_review_prompt.md` (DataSource 정정·매트릭스 정정·SSOT § 인용) + `be_develop_prompt.md` / `be_improvement_prompt.md` (DoD 에 SSOT § 인용) + `be-architecture.md` (매트릭스·도메인 격리 단락 Phase 13 일관) + `be-multimodule-guide.md` (표현 통일) + `CLAUDE.md` (§백엔드 위임 본문 압축 + 변경 이력 압축) + `harness-integration.md` (Phase 0-7 vs Phase 6-13 구분, BE 표준 본문 → SSOT 포인터) + `harness-state.md` (구식 문구 갱신 + 본 사이클 누적) | 사용자 판단 — "정보 중구난방으로 인해 에이전트의 로직 혼선 및 오작동 우려, 정보 단일화 및 명확화 필요". 11개 문서를 LLM 에이전트 컨텍스트 입력으로 사용하기에 자체 모순·SSOT 위반·역할 경계 침범 다수 발견 → 일괄 정정 |
+
+> 다음 진화 트리거: **FE 디렉토리 이전 + `backend/` 첫 셋업** (다음 세션 — 사용자 결정 2026-05-01). 진입점 = [`docs/readme/handoff/2026-05-06-be-cycle-closure.md`](../handoff/2026-05-06-be-cycle-closure.md). FE 이전 후 영향받는 SSOT·에이전트·docs 일괄 동기화 + `backend/` 첫 셋업 (Phase 6-13 표준 적용 — settings.gradle / build.gradle / buildSrc / app / core). 본 문서 *표준-코드 정합* 표에서 `frontend/` ❌ → ✅, `backend/` △ → ✅ 갱신 예정. `agent-fe-tester` 시범 생성 / 도메인 설계 / 보안 정책 사이클은 별도 트랙.
 
 ## 참고
 
