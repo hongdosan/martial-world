@@ -69,7 +69,7 @@ cp -r skills/harness ~/.claude/skills/harness
 
 ### 2.1 천기망 디렉토리 정합 (산출물 기준)
 
-> **2026-04-30 검증 결과**: Marketplace 옵션 A 로 설치된 plugin 자체는 **글로벌 위치**(`~/.claude/plugins/marketplaces/harness-marketplace/skills/harness/SKILL.md`)에서 로드된다. plugin 설치만으로 천기망 root 의 `.claude/skills/` 가 자동 생성되지 **않는다**. 따라서 §2.1 처리는 *plugin 설치 직후* 가 아니라 *harness 가 산출물(에이전트·스킬 정의)을 root 에 처음 쓸 때* 발동한다.
+> **2026-04-30 검증 결과** (2026-05-07 현재까지 유효 ✓): Marketplace 옵션 A 로 설치된 plugin 자체는 **글로벌 위치**(`~/.claude/plugins/marketplaces/harness-marketplace/skills/harness/SKILL.md`)에서 로드된다. plugin 설치만으로 천기망 root 의 `.claude/skills/` 가 자동 생성되지 **않는다**. 따라서 §2.1 처리는 *plugin 설치 직후* 가 아니라 *harness 가 산출물(에이전트·스킬 정의)을 root 에 처음 쓸 때* 발동한다.
 
 천기망은 `.claude/` 일부가 `.private-config/claude/` 로 symlink 되어 있다. 산출물이 root 에 떨어질 때 다음 매트릭스에 따라 처리:
 
@@ -92,6 +92,8 @@ ln -s ../.private-config/claude/claude-skills .claude/skills
 
 # init-private.sh 에 link 라인 추가 (멱등 보장)
 #   link ".private-config/claude/claude-skills" ".claude/skills"
+# ※ 2026-05-07 시점: 산출물 미발생으로 init-private.sh 에 아직 미추가.
+#   다음 harness 산출물 발생 시 위 라인 추가 + 본 주석 "이미 추가됨" 으로 갱신.
 
 # 검증
 ls -la .claude/skills    # → symlink 표시 (lrwxr-xr-x)
