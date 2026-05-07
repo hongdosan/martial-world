@@ -42,7 +42,7 @@
 심법·병기법·권각법·신보법·호신법·암기법·특수법 7대 계열 분류.
 각 무공의 장단점, 상세 초식, 특징을 구조화된 데이터로 제공.
 
-### 명(名)의 증명 — 칭호와 기연
+### 명(名)의 증명 — 칭호와 기연   
 
 천하제일인, 무림십존, ○○마 등 칭호 체계.
 영약·영물·신병이기 등 기연 데이터베이스.
@@ -58,7 +58,9 @@
 | 시작하기 | [빠른 시작](./docs/readme/getting-started.md) | 권한 있음/없음 시나리오 · 서브모듈 · 실행 · 빌드 |
 | 시작하기 | [프라이빗 설정 관리](./docs/readme/private-config.md) | 서브모듈 구조 · 공개/비밀 분리 · 2단계 커밋 |
 | 시작하기 | [환경 변수 컨벤션](./docs/readme/env-var-convention.md) | 3-tier 파일 계층 · CRA 로딩 · 키 네이밍 · 코드 패턴 |
-| 설계 | [아키텍처 & 기술 스택](./docs/readme/fe-architecture.md) | FSD · Vite · TanStack Query · Tailwind · 어댑터 격리 |
+| 설계 | [FE 아키텍처 & 기술 스택](./docs/readme/fe-architecture.md) | FSD · Vite · TanStack Query · Tailwind · 어댑터 격리 |
+| 설계 | [BE 아키텍처 & 기술 스택](./docs/readme/be-architecture.md) | 4축 (멀티모듈/헥사고날/모듈러 모놀리스/BFF) · DDD · 매트릭스 v3 · D1-D5 · 도메인별 DB |
+| 설계 | ↳ [BE 멀티 모듈 가이드 (Gradle)](./docs/readme/be-multimodule-guide.md) | settings.gradle · buildSrc · ArchUnit 룰 · 도메인 추가 절차 |
 | 설계 | [현 상태 분석](./docs/readme/harness/harness-state.md) | 12개 구성 요소 · 정량 측정 · 비판적 사실 분석 · 변경 이력 |
 | 설계 | ↳ [Harness 도입 가이드](./docs/readme/harness/harness-integration.md) | revfactory/harness 도입 절차 · BE/FE/기타 분담 원칙 |
 | 설계 | ↳ [Harness 설치·적용 가이드](./docs/readme/harness/harness-setup.md) | 플러그인 설치 → 첫 에이전트 생성 · 검증 · 롤백 · 트러블슈팅 |
