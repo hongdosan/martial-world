@@ -5,6 +5,8 @@
 > Tier 2 (Document & Clear) 적용. 본 문서는 fact 가 아닌 **hypothesis** 로 다룬다 — 새 세션은 인용된 파일을 직접 Read 도구로 읽고 코드/실제 상태와 대조 검증한 후 작업을 이어간다.
 >
 > **STATUS — 2026-05-06 BE 표준 정의 사이클 (Phase 6-13) 전체 종료 ✅**
+>
+> **후속 — 2026-05-07 BE-FE 정합성 정정 사이클 종료 ✅** (자체 모순·중구난방 정정 + FE Major 6 + 코드 audit). 후속 핸드오프: [`2026-05-07-be-fe-consistency-cycle.md`](./2026-05-07-be-fe-consistency-cycle.md). 다음 세션 트리거(*FE 디렉토리 이전 + Vite 마이그레이션*)는 두 핸드오프 모두 입력으로 사용.
 
 ## Summary
 
