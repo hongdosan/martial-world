@@ -5,6 +5,8 @@ title: 'fix: '
 labels: bug
 ---
 
+<!-- Proprietary — Copyright © 2026 홍혁준. See LICENSE. -->
+
 ## 배경
 어떤 상황에서 어떤 문제가 발생하는가.
 

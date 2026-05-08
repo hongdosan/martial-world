@@ -518,7 +518,7 @@ git submodule update --remote .private-config
 
 ### 8.1 공개/비밀 분리 원칙
 
-권한 없는 외부 기여자도 `git clone` 후 `./scripts/init-private.sh && cd frontend && npm install && npm start` 만으로 앱을 Mock 모드로 기동할 수 있어야 합니다. 이를 위해 **설정은 다음 3-tier 로 분리**합니다.
+권한 없는 외부 기여자도 `git clone` 후 `./scripts/init-private.sh && cd frontend && npm install && npm run dev` 만으로 앱을 Mock 모드로 기동할 수 있어야 합니다. 이를 위해 **설정은 다음 3-tier 로 분리**합니다.
 
 | 티어 | 파일 | 가시성 | 용도 |
 |---|---|---|---|
@@ -536,7 +536,7 @@ git submodule update --remote .private-config
 **비밀이 공개로 새지 않도록 지키는 3가지 규약**:
 
 1. 실제 비밀 값은 **프라이빗 저장소에만** 커밋 — 메인 저장소의 `.env` 에는 Mock/더미 값만
-2. `REACT_APP_*` 접두사는 클라이언트 번들에 포함되므로 **Server Secret 에는 사용 금지** (백엔드에서만 취급)
+2. `VITE_*` 접두사는 클라이언트 번들에 포함되므로 **Server Secret 에는 사용 금지** (백엔드에서만 취급)
 3. 새 비밀 키 추가 시 **프라이빗 저장소 먼저 push → 메인 저장소 나중에 push** ([§4 공통 절차](#4-설정을-바꾸고-싶을-때--공통-절차))
 
 상세 규약과 코드 패턴은 [환경 변수 컨벤션](./env-var-convention.md) 참조.

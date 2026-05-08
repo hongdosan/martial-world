@@ -5,6 +5,8 @@ title: 'feat: '
 labels: feature
 ---
 
+<!-- Proprietary — Copyright © 2026 홍혁준. See LICENSE. -->
+
 ## 배경
 
 ## 목적
