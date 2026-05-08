@@ -69,7 +69,7 @@ app → processes → pages → widgets → features → entities → shared
 |------|-----------|-----------|------|
 | Build Tool | Vite | Vite 5.x + Vitest | ✅ 적용 (2026-05-09) |
 | Data Fetching | TanStack Query | (미도입) | 도입 예정 |
-| Styling | Tailwind CSS | (미도입) | 도입 예정 |
+| Styling | Tailwind CSS | Tailwind v4 + `@tailwindcss/vite` | ✅ 적용 (2026-05-09) |
 
 > ⚠️ **도메인/화면 코드는 prototype (2026-05-09)** — `frontend/src/{entities,features,widgets,pages}/` 의 ~2183 LOC 는 *기획 사이클 부재 시점* 에 작성된 **prototype** 입니다. 아키텍처·스택은 본 표 표준 준수 (FSD/Vite/TS Strict 95%) 이나 도메인 모델 / 화면 / 사용자 흐름은 공식 기획 (도메인 설계 / 화면 설계 / 요구사항 정의서) **부재 상태**. 추후 기획 사이클 후 **애자일** 개선 — 단 초반 기획은 매우 중요 (rough X). 실서비스 수준 아닙니다.
 
