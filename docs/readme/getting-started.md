@@ -29,7 +29,7 @@ git submodule update --init --recursive
 # 의존성 설치 후 개발 서버 기동 (http://localhost:3000)
 cd frontend
 npm install
-npm start
+npm run dev
 ```
 
 ## 권한 없는 사용자 — Mock 모드
@@ -48,14 +48,14 @@ cd martial-arts
 # 의존성 설치 후 개발 서버 기동
 cd frontend
 npm install
-npm start
+npm run dev
 ```
 
 동작 원리 요약:
 
 | 파일 | 역할 |
 |---|---|
-| `frontend/.env` | CRA 가 항상 로드하는 공개 기본값 (Mock API URL, feature flag OFF) |
+| `frontend/.env` | Vite 가 항상 로드하는 공개 기본값 (Mock API URL, feature flag OFF) |
 | `frontend/.env.example` | 전체 키 템플릿 — 권한 없을 때 `frontend/.env.dev` 의 복사 원본 |
 | `frontend/.env.dev` | 권한 있으면 symlink, 없으면 `frontend/.env.example` 복사본 |
 

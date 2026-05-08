@@ -63,14 +63,12 @@ app → processes → pages → widgets → features → entities → shared
 
 ## 현재 상태 / 마이그레이션 예정
 
-상기 기술 스택은 천기망의 **결정된 표준**입니다. 일부 항목은 마이그레이션이 진행 예정인 상태입니다.
+상기 기술 스택은 천기망의 **결정된 표준**입니다. 일부 항목은 도입 사이클이 별도로 예정되어 있습니다.
 
 | 항목 | 결정 표준 | 현재 구현 | 상태 |
 |------|-----------|-----------|------|
-| Build Tool | Vite | Create React App (`react-scripts`) | 마이그레이션 예정 |
+| Build Tool | Vite | Vite 5.x + Vitest | ✅ 적용 (2026-05-09) |
 | Data Fetching | TanStack Query | (미도입) | 도입 예정 |
 | Styling | Tailwind CSS | (미도입) | 도입 예정 |
-
-> ※ CRA → Vite 마이그레이션 시점에 [환경 변수 컨벤션](./env-var-convention.md) 문서도 함께 갱신 필요 (CRA `process.env.REACT_APP_*` → Vite `import.meta.env.VITE_*`).
 
 > 결정 표준의 상세 규칙(라이브러리 어댑터 위치, OpenAPI 타입 운영, AI 행동 지침 등)은 프라이빗 서브모듈([`prompt/read_only/frontend/fe_reference_prompt.md`](../../.private-config/shared/prompt/read_only/frontend/fe_reference_prompt.md))에 단일 기준점으로 관리합니다. 접근 권한이 있는 협업자만 열람 가능합니다.

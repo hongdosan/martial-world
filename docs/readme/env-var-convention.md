@@ -8,7 +8,7 @@
 
 ## 범위
 
-- **본 문서의 구체 규약은 프론트엔드(CRA · React) 기준**이다. `REACT_APP_*` 접두사 · CRA 로딩 우선순위 등은 FE 전용.
+- **본 문서의 구체 규약은 프론트엔드(Vite · React) 기준**이다. `VITE_*` 접두사 · Vite 로딩 우선순위 등은 FE 전용.
 - **설계 원칙(공개/비밀 3-tier 분리 · 2단계 커밋 · Graceful degradation)** 은 백엔드에도 그대로 적용된다. 스프링 프로파일 기반 BE 도입 시 [백엔드 확장 지침](#백엔드-확장-지침) 참고.
 
 ## 목차
@@ -16,7 +16,7 @@
 - [범위](#범위)
 - [설계 원칙](#설계-원칙)
 - [파일 계층](#파일-계층)
-- [CRA 로딩 우선순위](#cra-로딩-우선순위)
+- [Vite 로딩 우선순위](#vite-로딩-우선순위)
 - [키 네이밍 규약](#키-네이밍-규약)
 - [코드 패턴](#코드-패턴)
 - [새 환경 변수 추가 절차](#새-환경-변수-추가-절차)
@@ -34,7 +34,7 @@
 
 | 경로 | 가시성 | 커밋 | 역할 |
 |---|---|---|---|
-| `frontend/.env` | 공개 | ✅ | 공개 기본값 — CRA 가 항상 로드, 권한 없이 실행 가능한 최저선 |
+| `frontend/.env` | 공개 | ✅ | 공개 기본값 — Vite 가 항상 로드, 권한 없이 실행 가능한 최저선 |
 | `frontend/.env.example` | 공개 | ✅ | 전체 키 템플릿 — 신규 키 추가 시 싱크 대상 + fallback 복사 원본 |
 | `frontend/.env.dev` | 로컬 | ❌ | 실제 개발 값 — 권한 있으면 symlink, 없으면 `frontend/.env.example` 복사본 |
 | `.private-config/frontend/env/.env.dev` | 프라이빗 | ✅(별도 저장소) | 실제 비밀 값 — 서브모듈에만 존재 |
@@ -52,32 +52,33 @@ frontend/.env.example 도 부재
   → warn 후 skip, frontend/.env 의 공개 기본값만 로드됨
 ```
 
-## CRA 로딩 우선순위
+## Vite 로딩 우선순위
 
-Create React App 은 다음 순서로 `.env` 파일을 읽으며, **나중에 읽힌 파일이 앞 값을 덮어쓴다**.
+Vite 는 `mode` 별로 다음 순서로 `.env` 파일을 읽으며, **나중에 읽힌 파일이 앞 값을 덮어쓴다** (`import.meta.env` 로 노출).
 
 ```
-.env.development.local > .env.local > .env.development > .env
+.env.[mode].local > .env.local > .env.[mode] > .env
 ```
 
+- 기본 mode: `development` (`vite` / `vite dev`), `production` (`vite build`), `test` (`vitest`)
 - `.env` 의 공개 기본값은 항상 로드됨
-- `.env.dev` 는 **CRA 기본 로딩 대상이 아님**. 실제 개발 값을 CRA 에 주입하려면 아래 중 택1
-  - `dotenv-cli` 도입: `dotenv -e .env.dev react-scripts start`
+- `.env.dev` 는 **Vite 기본 로딩 대상이 아님**. 실제 개발 값을 Vite 에 주입하려면 아래 중 택1
   - symlink 타겟을 `.env.development.local` 로 변경 ([`scripts/init-private.sh`](../../scripts/init-private.sh) 조정 필요)
+  - `vite --mode dev` 사용 + `.env.dev` 로 명명 통일
 
-> 현재 리포지토리에는 `process.env` 참조가 없어 이 선택은 **실제 env 변수 도입 시점으로 유예**한다. 해당 이슈에서 위 옵션 중 하나를 확정하고 `package.json` 의 `start` 스크립트를 함께 갱신한다.
+> 현재 리포지토리에는 `import.meta.env` 참조가 없어 이 선택은 **실제 env 변수 도입 시점으로 유예**한다. 해당 이슈에서 위 옵션 중 하나를 확정하고 `init-private.sh` symlink target 을 함께 갱신한다.
 
 ## 키 네이밍 규약
 
 | 패턴 | 용도 | 예시 |
 |---|---|---|
-| `REACT_APP_*` | CRA 가 런타임에 번들로 주입 (필수 prefix) | `REACT_APP_API_URL` |
-| `REACT_APP_<도메인>_<속성>` | 도메인 먼저, 속성 나중 | `REACT_APP_OAUTH_CLIENT_ID` |
-| `REACT_APP_FEATURE_<이름>` | Feature flag — boolean 은 `'true'`/`'false'` 문자열 | `REACT_APP_FEATURE_ANALYTICS` |
-| `REACT_APP_<이름>_ENABLED` | ON/OFF 토글 | `REACT_APP_OAUTH_ENABLED` |
+| `VITE_*` | Vite 가 클라이언트 번들에 주입 (필수 prefix) | `VITE_API_URL` |
+| `VITE_<도메인>_<속성>` | 도메인 먼저, 속성 나중 | `VITE_OAUTH_CLIENT_ID` |
+| `VITE_FEATURE_<이름>` | Feature flag — boolean 은 `'true'`/`'false'` 문자열 | `VITE_FEATURE_ANALYTICS` |
+| `VITE_<이름>_ENABLED` | ON/OFF 토글 | `VITE_OAUTH_ENABLED` |
 
-- **`REACT_APP_` 접두사 필수**: CRA 는 이 접두사가 붙은 변수만 번들에 포함한다
-- **비밀 값 금지 키워드**: 런타임 번들은 클라이언트에 노출되므로 *Server Secret* 은 절대 `REACT_APP_*` 로 두지 않는다 (백엔드 보호)
+- **`VITE_` 접두사 필수**: Vite 는 이 접두사가 붙은 변수만 클라이언트 번들 (`import.meta.env`) 에 포함한다
+- **비밀 값 금지 키워드**: 클라이언트 번들은 노출되므로 *Server Secret* 은 절대 `VITE_*` 로 두지 않는다 (백엔드 보호)
 - 대문자 + 언더스코어 · kebab-case 금지
 
 ## 코드 패턴
@@ -85,7 +86,7 @@ Create React App 은 다음 순서로 `.env` 파일을 읽으며, **나중에 �
 ### 1. 방어적 참조 (기본값 동반)
 
 ```typescript
-const apiUrl = process.env.REACT_APP_API_URL ?? 'https://mock-api.local';
+const apiUrl = import.meta.env.VITE_API_URL ?? 'https://mock-api.local';
 ```
 
 `undefined` 상태에서도 앱이 크래시하지 않도록 **항상 `??` 또는 `||` 로 기본값을 동반한다**.
@@ -93,7 +94,7 @@ const apiUrl = process.env.REACT_APP_API_URL ?? 'https://mock-api.local';
 ### 2. Feature flag
 
 ```typescript
-const oauthEnabled = process.env.REACT_APP_OAUTH_ENABLED === 'true';
+const oauthEnabled = import.meta.env.VITE_OAUTH_ENABLED === 'true';
 ```
 
 env 변수는 문자열이므로 boolean 비교는 반드시 `=== 'true'` 로 한다. truthy 비교(`Boolean(x)`)는 `'false'` 문자열이 `true` 로 평가되어 버그 유발.
@@ -112,8 +113,8 @@ Mock 모드에서도 UI 가 동작하도록 비밀 기반 기능은 **반드시 
 ### 4. 필수 값 누락 — 크래시 대신 경고
 
 ```typescript
-if (!process.env.REACT_APP_REQUIRED_KEY) {
-  console.warn('REACT_APP_REQUIRED_KEY 누락 — Mock 모드로 실행');
+if (!import.meta.env.VITE_REQUIRED_KEY) {
+  console.warn('VITE_REQUIRED_KEY 누락 — Mock 모드로 실행');
 }
 ```
 
@@ -126,19 +127,19 @@ FSD 의 `shared/config/env.ts` 같은 단일 지점에서 모든 env 변수를 �
 ```typescript
 // shared/config/env.ts
 export const env = {
-  apiUrl: process.env.REACT_APP_API_URL ?? 'https://mock-api.local',
-  oauthEnabled: process.env.REACT_APP_OAUTH_ENABLED === 'true',
-  oauthClientId: process.env.REACT_APP_OAUTH_CLIENT_ID ?? '',
-  featureAnalytics: process.env.REACT_APP_FEATURE_ANALYTICS === 'true',
+  apiUrl: import.meta.env.VITE_API_URL ?? 'https://mock-api.local',
+  oauthEnabled: import.meta.env.VITE_OAUTH_ENABLED === 'true',
+  oauthClientId: import.meta.env.VITE_OAUTH_CLIENT_ID ?? '',
+  featureAnalytics: import.meta.env.VITE_FEATURE_ANALYTICS === 'true',
 } as const;
 ```
 
-이후 코드에서는 `env.apiUrl` 로만 접근. `process.env` 직접 참조는 `shared/config/` 외부에서 금지.
+이후 코드에서는 `env.apiUrl` 로만 접근. `import.meta.env` 직접 참조는 `shared/config/` 외부에서 금지.
 
 ## 새 환경 변수 추가 절차
 
-1. **`.env` 갱신** — 공개 가능한 기본값 (없으면 안전한 더미)
-2. **`.env.example` 갱신** — 동일 키 + `your_<설명>_here` 플레이스홀더
+1. **`frontend/.env` 갱신** — 공개 가능한 기본값 (없으면 안전한 더미)
+2. **`frontend/.env.example` 갱신** — 동일 키 + `your_<설명>_here` 플레이스홀더
 3. **`.private-config/frontend/env/.env.dev` 갱신** (권한 있으면) — 실제 값
 4. **코드 추가** — `shared/config/env.ts` 에 타입 안전 래퍼 추가
 5. **문서 갱신** — 본 문서의 [키 네이밍 규약](#키-네이밍-규약) 표에 패턴 미등록 시 추가
@@ -154,7 +155,7 @@ export const env = {
 git clone --recursive https://github.com/hongdosan/martial-arts.git
 cd martial-arts
 ./scripts/init-private.sh
-cd frontend && npm install && npm start
+cd frontend && npm install && npm run dev
 ```
 - `readlink frontend/.env.dev` 이 `../.private-config/frontend/env/.env.dev` 반환
 - 실제 API · OAuth 등 전 기능 동작
@@ -165,7 +166,7 @@ cd frontend && npm install && npm start
 git clone https://github.com/hongdosan/martial-arts.git   # --recursive 없이
 cd martial-arts
 ./scripts/init-private.sh          # fallback: frontend/.env.example → frontend/.env.dev 복사
-cd frontend && npm install && npm start
+cd frontend && npm install && npm run dev
 ```
 - `frontend/.env.dev` 가 실파일(`frontend/.env.example` 복사본)로 존재
 - OAuth · Analytics 등 비밀 기반 기능은 OFF, 그 외 UI 는 정상 동작
@@ -177,11 +178,11 @@ cd frontend && npm install && npm start
 
 ### 파일 계층 매핑
 
-| 티어 | FE (CRA) | BE (Spring Boot) | 가시성 |
+| 티어 | FE (Vite) | BE (Spring Boot) | 가시성 |
 |---|---|---|---|
-| 공개 기본값 | `.env` | `application.yml` (또는 `application-default.yml`) | 공개 (커밋) |
-| 공개 템플릿 | `.env.example` | `application-example.yml` | 공개 (커밋) |
-| 실제 개발값 | `.env.dev` (symlink / copy) | `application-dev.yml` (symlink / copy) | 비커밋 |
+| 공개 기본값 | `frontend/.env` | `application.yml` (또는 `application-default.yml`) | 공개 (커밋) |
+| 공개 템플릿 | `frontend/.env.example` | `application-example.yml` | 공개 (커밋) |
+| 실제 개발값 | `frontend/.env.dev` (symlink / copy) | `application-dev.yml` (symlink / copy) | 비커밋 |
 | 실제 비밀값 | `.private-config/frontend/env/.env.dev` | `.private-config/backend/env/application-dev.yml` | 프라이빗 |
 
 ### 적용 규약 (FE 와 공통)
@@ -189,7 +190,7 @@ cd frontend && npm install && npm start
 1. **공개 기본값 최저선** — `application.yml` 만으로 앱이 기동 (in-memory DB · Mock 엔드포인트 · `@ConditionalOnProperty` 기반 기능 OFF)
 2. **비밀 격리** — 실제 DB 비밀번호 · OAuth Secret · JWT 서명 키는 `.private-config/backend/` 에만
 3. **Spring Profile 연계** — `spring.profiles.active=dev` 가 `application-dev.yml` 을 로드. FE 의 `.env.development.local` 과 동일한 역할
-4. **Feature Flag** — `@ConditionalOnProperty(name="feature.oauth.enabled", havingValue="true")` 로 비밀 기반 빈을 감싼다. FE 의 `REACT_APP_FEATURE_*` 대응
+4. **Feature Flag** — `@ConditionalOnProperty(name="feature.oauth.enabled", havingValue="true")` 로 비밀 기반 빈을 감싼다. FE 의 `VITE_FEATURE_*` 대응
 5. **`init-private.sh` 확장** — 서브모듈 부재 시 `application-example.yml` → `application-dev.yml` 복사 분기를 FE 블록과 동일 패턴으로 추가
 
 ### 유의점 (FE 와 차이)
@@ -210,5 +211,5 @@ cd frontend && npm install && npm start
 - [프라이빗 설정 관리](./private-config.md) — 서브모듈 · symlink · 2단계 커밋
 - [빠른 시작](./getting-started.md) — 최초 clone · 실행 절차
 - [아키텍처 & 기술 스택](./fe-architecture.md) — FSD · `shared/config/` 레이어 역할
-- CRA 공식: https://create-react-app.dev/docs/adding-custom-environment-variables/
+- Vite 환경 변수: https://vitejs.dev/guide/env-and-mode.html
 - 12-Factor App (Config): https://12factor.net/config
