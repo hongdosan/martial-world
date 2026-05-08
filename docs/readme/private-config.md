@@ -518,19 +518,19 @@ git submodule update --remote .private-config
 
 ### 8.1 공개/비밀 분리 원칙
 
-권한 없는 외부 기여자도 `git clone` 후 `./scripts/init-private.sh && npm install && npm start` 만으로 앱을 Mock 모드로 기동할 수 있어야 합니다. 이를 위해 **설정은 다음 3-tier 로 분리**합니다.
+권한 없는 외부 기여자도 `git clone` 후 `./scripts/init-private.sh && cd frontend && npm install && npm start` 만으로 앱을 Mock 모드로 기동할 수 있어야 합니다. 이를 위해 **설정은 다음 3-tier 로 분리**합니다.
 
 | 티어 | 파일 | 가시성 | 용도 |
 |---|---|---|---|
-| 1. 공개 기본값 | `.env` | 공개 (커밋) | 권한 없이도 앱이 크래시 없이 기동되는 최저선 |
-| 2. 공개 템플릿 | `.env.example` | 공개 (커밋) | 전체 키 목록 + 더미값, 권한 없으면 `.env.dev` 로 복사되어 사용 |
+| 1. 공개 기본값 | `frontend/.env` | 공개 (커밋) | 권한 없이도 앱이 크래시 없이 기동되는 최저선 |
+| 2. 공개 템플릿 | `frontend/.env.example` | 공개 (커밋) | 전체 키 목록 + 더미값, 권한 없으면 `frontend/.env.dev` 로 복사되어 사용 |
 | 3. 실제 비밀값 | `.private-config/frontend/env/.env.dev` | 프라이빗 | 실제 API 키 · OAuth Secret — 서브모듈에만 존재 |
 
 **[`scripts/init-private.sh`](../../scripts/init-private.sh) 자동 분기**:
 
 ```
-서브모듈 존재  →  .env.dev  ─symlink→  .private-config/frontend/env/.env.dev
-서브모듈 부재  →  .env.dev  ─copy──→  .env.example   (Mock 모드)
+서브모듈 존재  →  frontend/.env.dev  ─symlink→  .private-config/frontend/env/.env.dev
+서브모듈 부재  →  frontend/.env.dev  ─copy──→  frontend/.env.example   (Mock 모드)
 ```
 
 **비밀이 공개로 새지 않도록 지키는 3가지 규약**:

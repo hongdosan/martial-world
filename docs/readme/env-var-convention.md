@@ -34,22 +34,22 @@
 
 | 경로 | 가시성 | 커밋 | 역할 |
 |---|---|---|---|
-| `.env` | 공개 | ✅ | 공개 기본값 — CRA 가 항상 로드, 권한 없이 실행 가능한 최저선 |
-| `.env.example` | 공개 | ✅ | 전체 키 템플릿 — 신규 키 추가 시 싱크 대상 + fallback 복사 원본 |
-| `.env.dev` | 로컬 | ❌ | 실제 개발 값 — 권한 있으면 symlink, 없으면 `.env.example` 복사본 |
+| `frontend/.env` | 공개 | ✅ | 공개 기본값 — CRA 가 항상 로드, 권한 없이 실행 가능한 최저선 |
+| `frontend/.env.example` | 공개 | ✅ | 전체 키 템플릿 — 신규 키 추가 시 싱크 대상 + fallback 복사 원본 |
+| `frontend/.env.dev` | 로컬 | ❌ | 실제 개발 값 — 권한 있으면 symlink, 없으면 `frontend/.env.example` 복사본 |
 | `.private-config/frontend/env/.env.dev` | 프라이빗 | ✅(별도 저장소) | 실제 비밀 값 — 서브모듈에만 존재 |
 
-`.env.dev` 가 어떻게 준비되는지는 [`scripts/init-private.sh`](../../scripts/init-private.sh) 가 자동 결정한다.
+`frontend/.env.dev` 가 어떻게 준비되는지는 [`scripts/init-private.sh`](../../scripts/init-private.sh) 가 자동 결정한다.
 
 ```
 권한 있음 (서브모듈 존재)
-  → .env.dev  ─symlink→  .private-config/frontend/env/.env.dev  (실제 비밀값)
+  → frontend/.env.dev  ─symlink→  .private-config/frontend/env/.env.dev  (실제 비밀값)
 
 권한 없음 (서브모듈 부재)
-  → .env.dev  ─copy of→  .env.example  (더미값, Mock 모드)
+  → frontend/.env.dev  ─copy of→  frontend/.env.example  (더미값, Mock 모드)
 
-.env.example 도 부재
-  → warn 후 skip, .env 의 공개 기본값만 로드됨
+frontend/.env.example 도 부재
+  → warn 후 skip, frontend/.env 의 공개 기본값만 로드됨
 ```
 
 ## CRA 로딩 우선순위
@@ -154,9 +154,9 @@ export const env = {
 git clone --recursive https://github.com/hongdosan/martial-arts.git
 cd martial-arts
 ./scripts/init-private.sh
-npm install && npm start
+cd frontend && npm install && npm start
 ```
-- `readlink .env.dev` 이 `../.private-config/frontend/env/.env.dev` 반환
+- `readlink frontend/.env.dev` 이 `../.private-config/frontend/env/.env.dev` 반환
 - 실제 API · OAuth 등 전 기능 동작
 
 ### 권한 없는 사용자
@@ -164,10 +164,10 @@ npm install && npm start
 ```bash
 git clone https://github.com/hongdosan/martial-arts.git   # --recursive 없이
 cd martial-arts
-./scripts/init-private.sh          # fallback: .env.example → .env.dev 복사
-npm install && npm start
+./scripts/init-private.sh          # fallback: frontend/.env.example → frontend/.env.dev 복사
+cd frontend && npm install && npm start
 ```
-- `.env.dev` 가 실파일(`.env.example` 복사본)로 존재
+- `frontend/.env.dev` 가 실파일(`frontend/.env.example` 복사본)로 존재
 - OAuth · Analytics 등 비밀 기반 기능은 OFF, 그 외 UI 는 정상 동작
 - 앱 크래시 / 빌드 실패 없음
 

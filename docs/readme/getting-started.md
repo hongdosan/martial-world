@@ -23,10 +23,11 @@ cd martial-arts
 git submodule update --init --recursive
 
 # 프라이빗 설정 심볼릭 링크 생성 (macOS/Linux)
-# .env.dev → .private-config/frontend/env/.env.dev 로 symlink 연결
+# frontend/.env.dev → .private-config/frontend/env/.env.dev 로 symlink 연결
 ./scripts/init-private.sh
 
 # 의존성 설치 후 개발 서버 기동 (http://localhost:3000)
+cd frontend
 npm install
 npm start
 ```
@@ -41,10 +42,11 @@ git clone https://github.com/hongdosan/martial-arts.git
 cd martial-arts
 
 # 서브모듈이 없으면 init-private.sh 가 자동으로
-# .env.example 을 .env.dev 로 복사하여 Mock 모드를 준비합니다.
+# frontend/.env.example 을 frontend/.env.dev 로 복사하여 Mock 모드를 준비합니다.
 ./scripts/init-private.sh
 
 # 의존성 설치 후 개발 서버 기동
+cd frontend
 npm install
 npm start
 ```
@@ -53,13 +55,14 @@ npm start
 
 | 파일 | 역할 |
 |---|---|
-| `.env` | CRA 가 항상 로드하는 공개 기본값 (Mock API URL, feature flag OFF) |
-| `.env.example` | 전체 키 템플릿 — 권한 없을 때 `.env.dev` 의 복사 원본 |
-| `.env.dev` | 권한 있으면 symlink, 없으면 `.env.example` 복사본 |
+| `frontend/.env` | CRA 가 항상 로드하는 공개 기본값 (Mock API URL, feature flag OFF) |
+| `frontend/.env.example` | 전체 키 템플릿 — 권한 없을 때 `frontend/.env.dev` 의 복사 원본 |
+| `frontend/.env.dev` | 권한 있으면 symlink, 없으면 `frontend/.env.example` 복사본 |
 
 ## 빌드
 
 ```bash
+cd frontend
 npm run build
 ```
 

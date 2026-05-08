@@ -89,8 +89,8 @@ link() {
 #   2) 서브모듈 존재하나 .env.dev 원본 파일 미존재 (프라이빗 저장소에 아직 미추가)
 #   3) 수동 삭제로 .env.dev 가 사라진 상태
 env_fallback() {
-  local example="$PROJECT_ROOT/.env.example"
-  local envdev="$PROJECT_ROOT/.env.dev"
+  local example="$PROJECT_ROOT/frontend/.env.example"
+  local envdev="$PROJECT_ROOT/frontend/.env.dev"
 
   if [[ -L "$envdev" || -e "$envdev" ]]; then
     return 0
@@ -108,7 +108,7 @@ info "프라이빗 설정 심볼릭 링크 초기화 시작"
 link ".private-config/claude/claude-agents"   ".claude/agents"
 link ".private-config/claude/claude-artifact" ".claude/artifact"
 link ".private-config/claude/CLAUDE.md"       ".claude/CLAUDE.md"
-link ".private-config/frontend/env/.env.dev"  ".env.dev"
+link ".private-config/frontend/env/.env.dev"  "frontend/.env.dev"
 
 env_fallback
 
