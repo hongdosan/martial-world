@@ -100,8 +100,6 @@ Phase 2 대화형 RPG 의 LLM 은 **셀프 호스팅 (자체 서버 운영)** �
 - ✅ 외부 API 비용 0 / 데이터 프라이버시 / 강호 IP 파인튜닝 자유 / 검열 없음
 - ⚠️ GPU 서버 인프라 비용 (Phase 2 진입 시점 인프라 결정)
 
-**중요한 정정**: 초기 가설에서 *"클라이언트 사이드 LLM (브라우저 WebGPU)"* 로 잘못 해석된 적 있음. 사용자 명시 — *"내 서버에 로컬 LLM 학습/배포"*. 이 정정으로 모바일 PWA 의 WebGPU/저장 용량 제약은 *대부분 무관* 해진다.
-
 ### 4.4 모바일 전략 — Phase 별 차등 + PWA 출발
 
 | Phase | 웹 적합도 | 모바일 앱 적합도 | 권장 출발 |
@@ -127,6 +125,28 @@ Phase 2 대화형 RPG 의 LLM 은 **셀프 호스팅 (자체 서버 운영)** �
 
 ## 5. DDD 적용 원칙
 
+### 5.0 핵심 용어 풀이 (1인 작업자 컨텍스트 복원용)
+
+> 본 § 이하에서 사용되는 DDD 용어 정의. 한 달 후 본인이 다시 읽었을 때 즉시 이해 가능하도록 *천기망 예시* 와 함께 표기.
+
+| 용어 | 한 문장 풀이 | 천기망 예시 |
+|---|---|---|
+| **Subdomain** (하위 도메인) | 비즈니스를 의미적으로 나눈 큰 영역 | "세계관 사전" / "대화형 RPG" 각각이 하나의 Subdomain |
+| **Core Domain** | 차별점 — 이게 없으면 천기망이 아닌 영역 | 무협 세계관 IP (Phase 1 세계관 사전) |
+| **Supporting Subdomain** | Core 를 받쳐주는 영역 — 자체 차별점은 X | 대화형 RPG / 외부 IP 랭킹 / 2D RPG |
+| **Generic Subdomain** | 어디서나 같은 일반 영역 — 직접 만들 가치 낮음 | 인증 / 검색 / 권한 |
+| **Bounded Context** (BC) | 같은 용어가 *같은 의미* 로 쓰이는 경계 | "캐릭터" 가 사전·RPG·랭킹에서 *다른 모양* 일 수 있음 → 각각 별도 BC |
+| **Ubiquitous Language** (UL) | 기획·화면·코드·DB 가 *동일 단어* 사용 | "경지" 는 항상 "경지" (≠ "등급" / "레벨" / "랭크") |
+| **Aggregate** | 함께 변경되어야 하는 객체 묶음 + 일관성 단위 | "캐릭터 + 배운 무공 목록 + 현재 경지" 가 한 묶음 |
+| **불변식 (Invariant)** | Aggregate 가 *항상* 만족해야 하는 규칙 | *"검도 경지가 무공의 요구 검도 경지 미만이면 그 무공을 배울 수 없다"* |
+| **Domain Event** | 도메인에서 발생한 사실 (과거형 PascalCase) | `ArtAssigned` (무공이 부여됨) / `LevelAdvanced` (경지가 돌파됨) |
+| **Strategic Design** | *큰 그림* — Subdomain / BC / UL 식별 | Phase 1 본 사이클의 *주 작업* |
+| **Tactical Design** | *세부 구현* — Entity / VO / Repository 모델링 | 도메인 복잡 시 점진 도입 (MVP 단계 = 보류) |
+
+> ※ 본 표는 [Vaughn Vernon, "IDDD"] 의 정의를 *천기망 컨텍스트* 로 압축한 것. 정확한 표준 정의는 원전 참조.
+
+### 5.1 핵심 원칙
+
 본 사이클 및 후속 사이클은 [`2026-05-09-planning-cycle-trigger.md`](../handoff/2026-05-09-planning-cycle-trigger.md) §"DDD 적용 원칙" 을 단일 출처로 따른다. 핵심:
 
 - **Strategic Design 우선** — Bounded Context / Ubiquitous Language / Subdomain (Core/Supporting/Generic). Tactical Design 은 도메인 복잡 시 점진
@@ -135,7 +155,7 @@ Phase 2 대화형 RPG 의 LLM 은 **셀프 호스팅 (자체 서버 운영)** �
 - **행위 명세 정말 중요** (사용자 명시) — Aggregate 행위 카탈로그 (명령 + 이벤트 + 불변식) + BDD `Given/When/Then`. BE BDD 컨벤션 (`should_X_when_Y` + Testcontainers) 의 직접 입력
 - **Ubiquitous Language 강제** — 강호 용어 (경지 / 심법 / 문파 / 기연 / 칭호 등) 는 기획 / 화면 / 코드 / DB 모두 동일 표기
 
-### 5.1 4 Phase ↔ DDD Subdomain 매핑 (가설)
+### 5.2 4 Phase ↔ DDD Subdomain 매핑 (가설)
 
 | Phase | Subdomain 분류 | 이유 |
 |---|---|---|
@@ -184,3 +204,4 @@ Phase 2 대화형 RPG 의 LLM 은 **셀프 호스팅 (자체 서버 운영)** �
 | 날짜 | 변경 내용 | 사유 |
 |------|----------|------|
 | 2026-05-09 | **본 문서 신규** — 비전 1문장·정체성 (콘텐츠 IP 확장 패턴)·4 Phase 로드맵·Phase 의존 그래프·핵심 아키텍처 결정 4건 (베이스/커스텀/온라인 데이터 모델 / 싱글 플레이 / 셀프 호스팅 LLM / 모바일 PWA 출발) · DDD 적용 원칙 · 4 Phase ↔ Subdomain 매핑 가설 · Deferred 결정 10건 | 기획 사이클 trigger 진입 후 사용자 티키타카 결과 SSOT 화 — 대화 휘발 방지. 본 헌장이 모든 후속 사이클 (도메인 / 화면 / 요구사항 / 구현) 의 상위 SSOT |
+| 2026-05-09 | **v1 다듬기 (검토 후속)** — §5.0 *핵심 용어 풀이* 박스 신규 (DDD 11개 용어 천기망 예시 동반) + §5.1 *핵심 원칙* / §5.2 *Subdomain 매핑* 재번호 + §4.3 *LLM 오해 정정* 단락 삭제 (메타 history 는 git log + harness-state.md 에 위임) | 사용자 검토 — "어려운 용어로 잘 이해 안 됨 / 초기 문서로 나쁘지 않음". 1인 작업자 컨텍스트 복원 (한 달 후 본인 이해도) + 노이즈 제거. MVP 범위·톤 일관성은 후속 사이클에 자연 해소 |
