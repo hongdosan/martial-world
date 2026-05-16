@@ -9,6 +9,8 @@
 ## 목차
 
 - [1. 현재 구조](#1-현재-구조)
+  - [1.1 천기망 외 영역 (`히리즈/`)](#11-천기망-외-영역-히리즈)
+  - [1.2 `.private-config` 작업 시 `pull` 먼저 (히리즈 측 변경 가능성)](#12-private-config-작업-시-pull-먼저-히리즈-측-변경-가능성)
 - [2. 서브모듈의 동작 원리](#2-서브모듈의-동작-원리)
   - [2.1 `.private-config` 는 **독립된 git 저장소** 이다](#21-private-config-는-독립된-git-저장소-이다)
   - [2.2 메인 저장소는 "포인터(SHA)" 만 기록한다](#22-메인-저장소는-포인터sha-만-기록한다)
@@ -49,19 +51,49 @@
 
 ```
 .private-config/
-├── claude/              # Claude Code 관련 자원
+├── claude/              # Claude Code 관련 자원 (천기망)
 │   ├── CLAUDE.md
 │   ├── claude-agents/
 │   ├── claude-artifact/
 │   └── plan/
-├── shared/              # 양쪽(BE/FE) 공용
+├── shared/              # 양쪽(BE/FE) 공용 (천기망)
 │   ├── issue/           # 내부 이슈·플랜 원문
 │   └── prompt/          # 개발/리뷰용 프롬프트 템플릿
-├── backend/             # 백엔드 전용
-└── frontend/            # 프론트엔드 전용 (.env.dev 등)
+├── backend/             # 백엔드 전용 (천기망)
+├── frontend/            # 프론트엔드 전용 (.env.dev 등) (천기망)
+└── 히리즈/              # 천기망 외 영역 — 별도 저장소 *히리즈* 가 자체 관리. 천기망 측 무관 (§1.1 참조)
 ```
 
 > **중요**: 메인 저장소의 `.gitignore`는 `.claude/`를 무시합니다. 따라서 위 심볼릭 링크는 커밋되지 않고, 로컬에만 존재합니다. **프라이빗 내용은 절대 메인 저장소에 올라가지 않습니다.**
+
+### 1.1 천기망 외 영역 (`히리즈/`)
+
+`.private-config/` 저장소 (`martial-arts-config`) 는 **천기망 외에 별도 프로젝트 *히리즈* 와 공유** 합니다. 다음 원칙으로 격리됩니다:
+
+| 항목 | 천기망 영역 | 히리즈 영역 |
+|---|---|---|
+| 디렉토리 | `claude/` / `shared/` / `backend/` / `frontend/` | `히리즈/` (자체 관리) |
+| 작업 주체 | 천기망 작업자 | 히리즈 작업자 |
+| 상호 참조 | ❌ 금지 — 천기망 SSOT (`be_reference_prompt.md` / `vision.md` / 에이전트 정의) 가 `히리즈/` 를 참조하면 *도메인 결합* 발생 | ❌ 금지 (대칭) |
+| LLM 인덱싱 | 정상 | **Serena `ignored_paths` 로 제외** (`.serena/project.yml`) — 천기망 LLM 컨텍스트 오염 방지 |
+
+> **천기망 작업 시**: `히리즈/` 폴더는 *읽지도 수정하지도 않습니다*. 단일 GitHub 저장소를 *호스팅* 공유할 뿐, *도메인은 완전 분리*.
+
+### 1.2 `.private-config` 작업 시 `pull` 먼저 (히리즈 측 변경 가능성)
+
+천기망 + 히리즈 두 작업자가 같은 저장소에 push 하므로, `.private-config` 안에서 작업 시작 전에 `git pull` 을 권장합니다:
+
+```bash
+cd .private-config
+git pull          # ← 히리즈 측 변경 가능성 — non-fast-forward push 방지
+# ... 작업 ...
+git add . && git commit -m "..."
+git push
+cd ..
+git add .private-config && git commit -m "chore: 서브모듈 포인터 갱신" && git push
+```
+
+> 디렉토리가 완전 분리 (`claude/` vs `히리즈/`) 이므로 *파일 충돌* 가능성은 매우 낮으나, *원격 SHA 불일치* 로 push 거부 가능 → pull 한 번이면 해소.
 
 ---
 

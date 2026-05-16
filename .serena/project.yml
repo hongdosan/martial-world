@@ -63,7 +63,13 @@ ls_specific_settings: {}
 # list of additional paths to ignore in this project.
 # Same syntax as gitignore, so you can use * and **.
 # Note: global ignored_paths from serena_config.yml are also applied additively.
-ignored_paths: []
+ignored_paths:
+  # `.private-config/` 는 천기망 + 히리즈 (별도 저장소) 공유 영역.
+  # 히리즈 측이 자체 관리하는 폴더는 천기망 LLM 컨텍스트에서 제외.
+  # 폴더명 표기 변형 모두 커버 (정확한 영어 표기 확정 시 정리).
+  - ".private-config/히리즈"
+  - ".private-config/heries"
+  - ".private-config/Heries"
 
 # whether the project is in read-only mode
 # If set to true, all editing tools will be disabled and attempts to use them will result in an error
