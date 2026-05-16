@@ -65,9 +65,13 @@
 2. `/clear` 또는 세션 재기동
 3. 새 세션에서 "X.md 를 읽고 이어서 작업해" + **검증 지시**
 
-### 천기망 핸드오프 문서 구조
+### 천기망 핸드오프 문서 구조 — **롤링 `CURRENT.md` 단일 파일**
 
-`docs/readme/handoff/<YYYY-MM-DD>-<topic>.md` 형식. 예: `2026-04-30-harness-install.md`.
+> **정책 (2026-05-16~)**: 핸드오프는 **단일 `docs/readme/handoff/CURRENT.md` 갱신** 으로 통일. 사이클별 dated 파일 (`<YYYY-MM-DD>-<topic>.md`) 생성 금지. 과거 사이클의 핸드오프 본문은 `git log -p docs/readme/handoff/CURRENT.md` 로 복구 / `harness-state.md` 변경 이력이 인덱스.
+>
+> **사유**: (1) 새 세션 진입 시 *마지막 핸드오프* 만 필요 — 과거 dated 파일은 컨텍스트 노이즈 (2) 사이클 단위 history 는 `harness-state.md` + `git log` 가 단일 출처 (3) 파일 누적 → 정합성 동기화 부담 (4) "어느 파일이 최신인지" 판단 비용 제거.
+
+`docs/readme/handoff/CURRENT.md` 단일 파일. 사이클 closure 시 *덮어쓰기* (rolling overwrite).
 
 필수 섹션:
 
@@ -85,9 +89,10 @@
 
 > **Handoff 는 fact 가 아니라 hypothesis 로 다룬다.** 이전 세션이 혼동 상태에서 작성했을 가능성을 새 세션이 의심해야 한다.
 
-### 천기망 즉시 적용 사례
+### 천기망 현 사이클 핸드오프
 
-- [`2026-04-30-harness-install.md`](./2026-04-30-harness-install.md) — 환경 플래그 활성화 → 플러그인 설치 직전 단계의 핸드오프
+- [`CURRENT.md`](./CURRENT.md) — 가장 최근 사이클 closure 핸드오프 (롤링 갱신)
+- 과거 사이클: `git log -p docs/readme/handoff/CURRENT.md` (본문) + [`../harness/harness-state.md`](../harness/harness-state.md) 변경 이력 (인덱스)
 
 ### 토큰 예산
 
@@ -190,9 +195,9 @@
 | 원문 | 천기망 |
 |------|------|
 | `.claude/reports/handoff/` | `docs/readme/handoff/` (현재). registry 패턴 본격 도입 시 `.claude/reports/handoff/` 로 이동 검토 |
-| `.claude/reports/_registry.md` | (미도입) |
+| `.claude/reports/_registry.md` | (미도입 — `harness-state.md` 변경 이력이 인덱스 역할) |
 | `.claude/skills/handoff/SKILL.md` | (harness 플러그인 도입 후 검토) |
-| 핸드오프 파일 명명 | `<YYYY-MM-DD>-<topic>.md` (예: `2026-04-30-harness-install.md`) |
+| 핸드오프 파일 명명 | **`CURRENT.md` 단일** (롤링 갱신, 2026-05-16~). 과거 사이클은 `git log -p` 로 복구 |
 
 ---
 
@@ -223,7 +228,7 @@
 세션 종료 직전, Tier 2 핸드오프 문서를 자동 작성하기 위한 압축 프롬프트. 원문 아이디어를 바탕으로 천기망 디렉토리·작성 규칙·토큰 예산을 반영해 자체 작성.
 
 ```
-세션 종료 핸드오프를 docs/readme/handoff/<YYYY-MM-DD>-<topic>.md 에 작성한다.
+세션 종료 핸드오프를 docs/readme/handoff/CURRENT.md 에 덮어쓴다 (롤링 단일 파일 정책 — 2026-05-16~).
 
 포함 섹션:
 - Summary (완료 사항 1–3문장)

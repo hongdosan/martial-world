@@ -4,7 +4,7 @@
 
 > 본 문서는 천기망 프로젝트의 **비전·정체성·로드맵 헌장 (charter)** 이다. 모든 후속 사이클 (도메인 설계 / 화면 설계 / 요구사항 / 구현) 은 본 문서를 *상위 SSOT* 로 참조한다.
 > 본 문서 자체의 변경은 [`vibe-coding-flow.md`](../../../.private-config/shared/prompt/read_only/vibe-coding-flow.md) §3 을 따른다. 변경 시 §8 변경 이력에 기록.
-> **선행 핸드오프**: [`2026-05-09-planning-cycle-trigger.md`](../handoff/2026-05-09-planning-cycle-trigger.md)
+> **현 사이클 핸드오프**: [`CURRENT.md`](../handoff/CURRENT.md) (롤링 단일 파일 — 2026-05-16~). 과거 사이클은 `git log -p docs/readme/handoff/CURRENT.md` + [`harness-state.md`](../harness/harness-state.md) 변경 이력
 
 ## 1. 한 문장 비전
 
@@ -265,7 +265,7 @@ Phase 2 대화형 RPG 의 LLM 은 **셀프 호스팅 (자체 서버 운영)** �
 
 ### 5.2 부속 핵심 원칙
 
-본 사이클 및 후속 사이클은 [`2026-05-09-planning-cycle-trigger.md`](../handoff/2026-05-09-planning-cycle-trigger.md) §"DDD 적용 원칙" 을 단일 출처로 따른다. 핵심:
+본 사이클 및 후속 사이클은 본 문서 §5.0 (용어 풀이) + §5.1 (천기망 DDD 적용 정의 — 헌법급 SSOT) 을 단일 출처로 따른다. 부속 핵심 원칙:
 
 - **Strategic Design 우선** — Bounded Context / Ubiquitous Language / Subdomain (Core/Supporting/Generic). Tactical Design 은 도메인 복잡 시 점진
 - **Event Storming 1인 변형** — 시간순 이벤트 마크다운 → Aggregate 후보 → BC 식별
@@ -306,7 +306,7 @@ Phase 2 대화형 RPG 의 LLM 은 **셀프 호스팅 (자체 서버 운영)** �
 
 ## 7. 참고
 
-- 선행 핸드오프: [`2026-05-09-planning-cycle-trigger.md`](../handoff/2026-05-09-planning-cycle-trigger.md)
+- 현 사이클 핸드오프: [`CURRENT.md`](../handoff/CURRENT.md) (롤링 단일 — 과거는 `git log -p`)
 - BE 단일 기준점: [`be_reference_prompt.md`](../../../.private-config/shared/prompt/read_only/backend/be_reference_prompt.md) *(private)*
 - FE 단일 기준점: [`fe_reference_prompt.md`](../../../.private-config/shared/prompt/read_only/frontend/fe_reference_prompt.md) *(private)*
 - 메타 워크플로우 SSOT: [`vibe-coding-flow.md`](../../../.private-config/shared/prompt/read_only/vibe-coding-flow.md) *(private)*

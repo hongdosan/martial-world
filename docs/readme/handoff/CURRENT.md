@@ -6,7 +6,7 @@
 >
 > **STATUS — 기획 사이클 Phase 1·2 (비전 / 요구사항) closure ✅** / Phase 3 (DDD Strategic) ⏳ 대기
 >
-> **선행 핸드오프**: [`2026-05-09-planning-cycle-trigger.md`](./2026-05-09-planning-cycle-trigger.md)
+> **선행 사이클 history**: `git log -p docs/readme/handoff/CURRENT.md` (본문) + [`../harness/harness-state.md`](../harness/harness-state.md) 변경 이력 (인덱스). *dated 파일 정책 폐기 — 2026-05-16~*
 
 ## Summary
 
@@ -179,11 +179,9 @@ ee3d59c  docs: FE Storybook 미도입 SSOT 표기 사이클
 - `frontend/src/pages/codex/` — 메인 페이지 (511 LOC)
 - `frontend/src/features/{codex-export,defaults-restore,entry-edit,entry-filter,entry-reorder}/`
 
-### 선행 사이클 핸드오프
+### 선행 사이클 history
 
-- [`2026-05-09-planning-cycle-trigger.md`](./2026-05-09-planning-cycle-trigger.md) — 직전 (기획 사이클 trigger)
-- [`2026-05-09-fe-stack-closure-cycle.md`](./2026-05-09-fe-stack-closure-cycle.md) — FE 스택 closure
-- [`2026-05-08-fe-vite-migration-cycle.md`](./2026-05-08-fe-vite-migration-cycle.md) — FE Vite
+> 2026-05-16~ *롤링 단일 파일 정책* 으로 dated 파일 폐기. 직전 사이클 본문은 `git log -p docs/readme/handoff/CURRENT.md` / 사이클 인덱스는 [`../harness/harness-state.md`](../harness/harness-state.md) 변경 이력.
 
 ## 다음 세션 진입 절차 — Phase 3 도메인 모델링 (DDD Strategic Design)
 

@@ -210,7 +210,7 @@
 
 - 상위 SSOT: [`vision.md`](./vision.md) — 비전·정체성·로드맵 헌장
 - DDD 헌법: [`vision.md §5.1`](./vision.md) — 천기망 DDD 적용 정의 (행위 → 도메인)
-- 선행 핸드오프: [`2026-05-09-planning-cycle-trigger.md`](../handoff/2026-05-09-planning-cycle-trigger.md)
+- 현 사이클 핸드오프: [`CURRENT.md`](../handoff/CURRENT.md) (롤링 단일 — 과거는 `git log -p`)
 - 변경 이력 단일 출처: [`harness-state.md`](../harness/harness-state.md)
 - BE 단일 기준점: `.private-config/shared/prompt/read_only/backend/be_reference_prompt.md` *(private)*
 - FE 단일 기준점: `.private-config/shared/prompt/read_only/frontend/fe_reference_prompt.md` *(private)*
