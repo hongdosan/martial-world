@@ -125,25 +125,28 @@ ee3d59c  docs: FE Storybook 미도입 SSOT 표기 사이클
 
 > ⚠️ 4 Phase ≠ 기획 사이클 Phase. *4 Phase* = 프로젝트 전체 (사전/RPG/랭킹/2D). *기획 사이클 Phase 1-5* = 비전/요구/도메인/행위/화면. 본 핸드오프 closure = *기획 사이클 Phase 1-2 완료*.
 
-## 병행 트랙 — `히리즈` 저장소 `.private-config` 공유 (2026-05-16 사실 메모)
+## 병행 트랙 — `H-eries` 프로젝트 `.private-config` 공유 (2026-05-16 사실 메모)
 
-> 본 트랙은 *천기망 기획 사이클과 무관* — **천기망 측 추가 작업 없음**. 사용자의 별도 저장소 *히리즈* (Heries) 가 천기망의 `.private-config` 서브모듈 (`martial-arts-config`) 을 *함께 사용* 하고 있다는 *사실 메모*.
+> 본 트랙은 *천기망 기획 사이클과 무관* — **천기망 측 추가 작업 없음**. 사용자의 별도 프로젝트 *H-eries* (한글 발음 "히리즈") 가 천기망의 `.private-config` 서브모듈 (`martial-arts-config`) 을 *함께 사용* 하고 있다는 *사실 메모*.
 
 ### 현재 상태 (사용자 명시)
 
-- **`.private-config/` 안에 `히리즈/` 폴더 추가는 히리즈 측에서 진행 중** — 천기망 측 작업 0
-- **격리 보장됨** — 히리즈 측은 *`히리즈/` 폴더만 생성*. 천기망 영역 (`claude/` / `shared/` 등) 무변경
+- **GitHub `martial-arts-config/heries/` 폴더는 H-eries 측에서 진행 중** — 천기망 측 작업 0
+- **격리 보장됨** — H-eries 측은 *`heries/` 폴더만 생성* (자체 README 포함). 천기망 영역 (`claude/` / `shared/` 등) 무변경
+- 폴더 URL: `https://github.com/hongdosan/martial-arts-config/tree/main/heries`
 
 ```
-.private-config/  (martial-arts-config — 단일 저장소, 천기망+히리즈 공유)
-├── claude/                  ← 천기망 (히리즈 측 무변경)
-├── shared/                  ← 천기망 (히리즈 측 무변경)
-└── 히리즈/                  ← 히리즈 측에서 자체 관리 (천기망 측 무관)
+.private-config/  (martial-arts-config — 단일 저장소, 천기망+H-eries 공유)
+├── claude/                  ← 천기망 (H-eries 측 무변경)
+├── shared/                  ← 천기망 (H-eries 측 무변경)
+├── frontend/                ← 천기망
+├── backend/                 ← 천기망
+└── heries/                  ← H-eries 측 자체 관리 (천기망 측 무관, 자체 README)
 ```
 
 ### 천기망 측 알아둘 점
 
-- *히리즈/* 디렉토리는 **무시 + 건드리지 않음** — 천기망 SSOT (`be_reference_prompt.md` / `vision.md` / 에이전트 정의) 가 *히리즈/* 를 참조하면 결합 발생 → 금지
+- *`heries/`* 디렉토리는 **무시 + 건드리지 않음** — 천기망 SSOT (`be_reference_prompt.md` / `vision.md` / 에이전트 정의) 가 *`heries/`* 를 참조하면 결합 발생 → 금지
 - **의존 방향 = 상호 참조 X** — 호스팅 공유만, 도메인 결합 금지
 - `.private-config` 가 *단일 GitHub 저장소* 라는 점 변동 X (서브모듈 포인터 갱신 패턴 그대로)
 
@@ -151,13 +154,10 @@ ee3d59c  docs: FE Storybook 미도입 SSOT 표기 사이클
 
 | 영역 | 조치 | 위치 |
 |---|---|---|
-| **LLM 컨텍스트 오염 방지** | Serena `ignored_paths` 에 3개 표기 변형 (`.private-config/히리즈` / `heries` / `Heries`) 추가 — Serena MCP 가 `히리즈/` 를 인덱싱하지 않음 | `.serena/project.yml` |
-| **작업 절차 — `pull` 먼저** | 천기망 + 히리즈 두 작업자가 같은 저장소에 push 하므로 `.private-config` 진입 시 `git pull` 권장 | `docs/readme/private-config.md §1.2` |
-| **천기망 외 영역 명시** | 저장소 구조 표 + §1.1 격리 원칙 표 (디렉토리 / 작업 주체 / 상호 참조 / LLM 인덱싱) | `docs/readme/private-config.md §1·§1.1` |
-
-### Deferred (선택적, 즉시 필요 X)
-
-- 영어 표기 (`Heries` / 다른 표기) — GitHub repo 명 확정 시점에 본 핸드오프 + `.serena/project.yml` 정정 (현재는 한글 + 영어 변형 3종 모두 ignore)
+| **LLM 컨텍스트 오염 방지** | Serena `ignored_paths` 에 `.private-config/heries` + `Heries` (대소문자 안전 마진) 추가 — Serena MCP 가 `heries/` 를 인덱싱하지 않음 | `.serena/project.yml` |
+| **작업 절차 — `pull` 먼저** | 천기망 + H-eries 두 작업자가 같은 저장소에 push 하므로 `.private-config` 진입 시 `git pull` 권장 | `docs/readme/private-config.md §1.2` |
+| **천기망 외 영역 명시 (천기망 측)** | 저장소 구조 표 + §1.1 격리 원칙 표 (디렉토리 / 작업 주체 / 상호 참조 / LLM 인덱싱) | `docs/readme/private-config.md §1·§1.1` |
+| **공유 저장소 README 갱신 (서브모듈 측)** | `.private-config/README.md` — 첫 단락 *공유 저장소* 톤 / 디렉토리 구조에 `heries/` 추가 / 디렉토리 용도 표 *소유자* 컬럼 + `heries/` 행 / §격리 원칙 표 / §개발 워크플로우 pull-first / §주의사항 *상대 영역 무관* / §관련 문서 분리 | `.private-config/README.md` |
 
 ## Traps to Avoid
 

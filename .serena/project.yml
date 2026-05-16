@@ -64,10 +64,9 @@ ls_specific_settings: {}
 # Same syntax as gitignore, so you can use * and **.
 # Note: global ignored_paths from serena_config.yml are also applied additively.
 ignored_paths:
-  # `.private-config/` 는 천기망 + 히리즈 (별도 저장소) 공유 영역.
-  # 히리즈 측이 자체 관리하는 폴더는 천기망 LLM 컨텍스트에서 제외.
-  # 폴더명 표기 변형 모두 커버 (정확한 영어 표기 확정 시 정리).
-  - ".private-config/히리즈"
+  # `.private-config/` 는 천기망 + H-eries (별도 프로젝트) 공유 저장소.
+  # H-eries 측 자체 관리 폴더 (`heries/`) 는 천기망 LLM 컨텍스트에서 제외.
+  # 대소문자 변형은 안전 마진 (URL: github.com/hongdosan/martial-arts-config/tree/main/heries).
   - ".private-config/heries"
   - ".private-config/Heries"
 
