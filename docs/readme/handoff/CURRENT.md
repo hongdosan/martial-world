@@ -60,7 +60,7 @@ b28c17c  docs: CLAUDE.md 변경 이력 2행 — 2026-05-16 점검 라운드
 | `docs/readme/handoff/CURRENT.md` | 본 핸드오프 (롤링 덮어쓰기) |
 | `docs/readme/harness/harness-state.md` | 변경 이력 3행 (도메인 점검 / 히리즈 사전 방어 / README 개선) |
 | `.private-config/README.md` | 7건 개선 (첫 단락 / 디렉토리 구조 / 용도 표 / 격리 원칙 / 워크플로우 / 주의사항 / 관련 문서) |
-| `.private-config/claude/CLAUDE.md` | 변경 이력 3행 |
+| `.private-config/martial-world/claude/CLAUDE.md` | 변경 이력 3행 |
 | `.serena/project.yml` | `ignored_paths` 신규 (`.private-config/heries` + `Heries`) |
 
 ### 메모리 (영구 — 사용자 행동 원칙)

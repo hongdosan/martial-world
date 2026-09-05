@@ -23,7 +23,7 @@ cd martial-arts
 git submodule update --init --recursive
 
 # 프라이빗 설정 심볼릭 링크 생성 (macOS/Linux)
-# frontend/.env.dev → .private-config/frontend/env/.env.dev 로 symlink 연결
+# frontend/.env.dev → .private-config/martial-world/frontend/env/.env.dev 로 symlink 연결
 ./scripts/init-private.sh
 
 # 의존성 설치 후 개발 서버 기동 (http://localhost:3000)

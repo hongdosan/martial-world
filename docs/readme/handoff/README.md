@@ -112,7 +112,7 @@
 | 위치 | 용도 | 변경 정책 |
 |------|------|---------|
 | `~/.claude/CLAUDE.md` | 글로벌 사용자 규약 | 사용자 개인 영역 |
-| `.claude/CLAUDE.md` (symlink → `.private-config/claude/CLAUDE.md`) | 천기망 에이전트 위임 가이드 | 변하지 않는 규약만 |
+| `.claude/CLAUDE.md` (symlink → `.private-config/martial-world/claude/CLAUDE.md`) | 천기망 에이전트 위임 가이드 | 변하지 않는 규약만 |
 | `docs/readme/fe-architecture.md` | FE 아키텍처 SSOT | 표준 결정 시점에 갱신 |
 | `.private-config/shared/prompt/read_only/{frontend,backend}/*_reference_prompt.md` | FE/BE 단일 기준점 | 표준 결정 시점에 갱신 |
 

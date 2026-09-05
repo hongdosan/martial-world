@@ -71,27 +71,27 @@ cp -r skills/harness ~/.claude/skills/harness
 
 > **2026-04-30 검증 결과** (2026-05-07 현재까지 유효 ✓): Marketplace 옵션 A 로 설치된 plugin 자체는 **글로벌 위치**(`~/.claude/plugins/marketplaces/harness-marketplace/skills/harness/SKILL.md`)에서 로드된다. plugin 설치만으로 천기망 root 의 `.claude/skills/` 가 자동 생성되지 **않는다**. 따라서 §2.1 처리는 *plugin 설치 직후* 가 아니라 *harness 가 산출물(에이전트·스킬 정의)을 root 에 처음 쓸 때* 발동한다.
 
-천기망은 `.claude/` 일부가 `.private-config/claude/` 로 symlink 되어 있다. 산출물이 root 에 떨어질 때 다음 매트릭스에 따라 처리:
+천기망은 `.claude/` 일부가 `.private-config/martial-world/claude/` 로 symlink 되어 있다. 산출물이 root 에 떨어질 때 다음 매트릭스에 따라 처리:
 
 | 디렉토리 | 현재 | 산출물 발생 시 처리 |
 |---------|------|------------------|
-| `.claude/agents/` | symlink → `.private-config/claude/claude-agents/` | 그대로 (생성물이 자동으로 서브모듈에 들어감 ✓) |
+| `.claude/agents/` | symlink → `.private-config/martial-world/claude/claude-agents/` | 그대로 (생성물이 자동으로 서브모듈에 들어감 ✓) |
 | `.claude/skills/` | **부재** | 산출물 발생 시 → **즉시 symlink 화** 후 진행 |
-| `.claude/CLAUDE.md` | symlink → `.private-config/claude/CLAUDE.md` | 그대로 |
+| `.claude/CLAUDE.md` | symlink → `.private-config/martial-world/claude/CLAUDE.md` | 그대로 |
 
 `.claude/skills/` 가 산출물로 처음 만들어진 경우 즉시 symlink 처리:
 
 ```bash
 # harness 가 .claude/skills/<skill-name>/ 를 만들었다면 먼저 이동
-mkdir -p .private-config/claude/claude-skills
-mv .claude/skills/<skill-name> .private-config/claude/claude-skills/
+mkdir -p .private-config/martial-world/claude/claude-skills
+mv .claude/skills/<skill-name> .private-config/martial-world/claude/claude-skills/
 
 # 기존 .claude/skills/ 비우고 symlink 생성
 rmdir .claude/skills 2>/dev/null
-ln -s ../.private-config/claude/claude-skills .claude/skills
+ln -s ../.private-config/martial-world/claude/claude-skills .claude/skills
 
 # init-private.sh 에 link 라인 추가 (멱등 보장)
-#   link ".private-config/claude/claude-skills" ".claude/skills"
+#   link ".private-config/martial-world/claude/claude-skills" ".claude/skills"
 # ※ 2026-05-07 시점: 산출물 미발생으로 init-private.sh 에 아직 미추가.
 #   다음 harness 산출물 발생 시 위 라인 추가 + 본 주석 "이미 추가됨" 으로 갱신.
 
@@ -146,7 +146,7 @@ Claude Code 세션에서 다음 자연어 프롬프트를 입력:
 표준: 천기망 FE 단일 기준점(.private-config/shared/prompt/read_only/frontend/fe_reference_prompt.md) 준수.
 기술 후보: Vitest 또는 Playwright (선택 가이드 포함).
 이름 규약: 파일 agent-fe-tester.md, frontmatter name: martial-arts-fe-tester.
-산출물 위치: .claude/agents/ (실제는 .private-config/claude/claude-agents/ symlink).
+산출물 위치: .claude/agents/ (실제는 .private-config/martial-world/claude/claude-agents/ symlink).
 ```
 
 ### 4.2 harness 자동 실행 단계 (Phase 0–6)
@@ -246,7 +246,7 @@ rm -rf ~/.claude/skills/harness
 
 ### 8.1 `.claude/skills/` 가 git 본 저장소에 추적되어 노이즈 발생
 **원인**: §2.1 의 symlink 단계 미수행.
-**해결**: §2.1 절차로 `.private-config/claude/claude-skills/` 로 이동 + symlink 생성.
+**해결**: §2.1 절차로 `.private-config/martial-world/claude/claude-skills/` 로 이동 + symlink 생성.
 
 ### 8.2 harness 가 `_workspace/` 를 천기망 root 에 만듦
 **원인**: harness 기본 동작.

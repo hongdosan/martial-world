@@ -26,7 +26,7 @@
 ## 설계 원칙
 
 1. **공개 기본값 최저선** — `.env` 만으로도 앱이 크래시 없이 기동된다 (Mock 모드)
-2. **비밀 격리** — 실제 값은 프라이빗 서브모듈(`.private-config/frontend/env/.env.dev`) 에만 존재
+2. **비밀 격리** — 실제 값은 프라이빗 서브모듈(`.private-config/martial-world/frontend/env/.env.dev`) 에만 존재
 3. **단일 진실 공급원** — 비밀 값은 symlink 로 연결하여 복사본을 만들지 않는다
 4. **Graceful degradation** — 비밀 기반 기능은 feature flag 로 감싸 OFF 시 UI 붕괴 없이 동작
 
@@ -37,13 +37,13 @@
 | `frontend/.env` | 공개 | ✅ | 공개 기본값 — Vite 가 항상 로드, 권한 없이 실행 가능한 최저선 |
 | `frontend/.env.example` | 공개 | ✅ | 전체 키 템플릿 — 신규 키 추가 시 싱크 대상 + fallback 복사 원본 |
 | `frontend/.env.dev` | 로컬 | ❌ | 실제 개발 값 — 권한 있으면 symlink, 없으면 `frontend/.env.example` 복사본 |
-| `.private-config/frontend/env/.env.dev` | 프라이빗 | ✅(별도 저장소) | 실제 비밀 값 — 서브모듈에만 존재 |
+| `.private-config/martial-world/frontend/env/.env.dev` | 프라이빗 | ✅(별도 저장소) | 실제 비밀 값 — 서브모듈에만 존재 |
 
 `frontend/.env.dev` 가 어떻게 준비되는지는 [`scripts/init-private.sh`](../../scripts/init-private.sh) 가 자동 결정한다.
 
 ```
 권한 있음 (서브모듈 존재)
-  → frontend/.env.dev  ─symlink→  .private-config/frontend/env/.env.dev  (실제 비밀값)
+  → frontend/.env.dev  ─symlink→  .private-config/martial-world/frontend/env/.env.dev  (실제 비밀값)
 
 권한 없음 (서브모듈 부재)
   → frontend/.env.dev  ─copy of→  frontend/.env.example  (더미값, Mock 모드)
@@ -140,7 +140,7 @@ export const env = {
 
 1. **`frontend/.env` 갱신** — 공개 가능한 기본값 (없으면 안전한 더미)
 2. **`frontend/.env.example` 갱신** — 동일 키 + `your_<설명>_here` 플레이스홀더
-3. **`.private-config/frontend/env/.env.dev` 갱신** (권한 있으면) — 실제 값
+3. **`.private-config/martial-world/frontend/env/.env.dev` 갱신** (권한 있으면) — 실제 값
 4. **코드 추가** — `shared/config/env.ts` 에 타입 안전 래퍼 추가
 5. **문서 갱신** — 본 문서의 [키 네이밍 규약](#키-네이밍-규약) 표에 패턴 미등록 시 추가
 6. **커밋 분리** — 프라이빗 저장소(실제 값) 먼저 push, 메인 저장소(공개 키 + 코드) 나중에 push
@@ -157,7 +157,7 @@ cd martial-arts
 ./scripts/init-private.sh
 cd frontend && npm install && npm run dev
 ```
-- `readlink frontend/.env.dev` 이 `../.private-config/frontend/env/.env.dev` 반환
+- `readlink frontend/.env.dev` 이 `../.private-config/martial-world/frontend/env/.env.dev` 반환
 - 실제 API · OAuth 등 전 기능 동작
 
 ### 권한 없는 사용자
@@ -183,12 +183,12 @@ cd frontend && npm install && npm run dev
 | 공개 기본값 | `frontend/.env` | `application.yml` (또는 `application-default.yml`) | 공개 (커밋) |
 | 공개 템플릿 | `frontend/.env.example` | `application-example.yml` | 공개 (커밋) |
 | 실제 개발값 | `frontend/.env.dev` (symlink / copy) | `application-dev.yml` (symlink / copy) | 비커밋 |
-| 실제 비밀값 | `.private-config/frontend/env/.env.dev` | `.private-config/backend/env/application-dev.yml` | 프라이빗 |
+| 실제 비밀값 | `.private-config/martial-world/frontend/env/.env.dev` | `.private-config/martial-world/backend/env/application-dev.yml` | 프라이빗 |
 
 ### 적용 규약 (FE 와 공통)
 
 1. **공개 기본값 최저선** — `application.yml` 만으로 앱이 기동 (in-memory DB · Mock 엔드포인트 · `@ConditionalOnProperty` 기반 기능 OFF)
-2. **비밀 격리** — 실제 DB 비밀번호 · OAuth Secret · JWT 서명 키는 `.private-config/backend/` 에만
+2. **비밀 격리** — 실제 DB 비밀번호 · OAuth Secret · JWT 서명 키는 `.private-config/martial-world/backend/` 에만
 3. **Spring Profile 연계** — `spring.profiles.active=dev` 가 `application-dev.yml` 을 로드. FE 의 `.env.development.local` 과 동일한 역할
 4. **Feature Flag** — `@ConditionalOnProperty(name="feature.oauth.enabled", havingValue="true")` 로 비밀 기반 빈을 감싼다. FE 의 `VITE_FEATURE_*` 대응
 5. **`init-private.sh` 확장** — 서브모듈 부재 시 `application-example.yml` → `application-dev.yml` 복사 분기를 FE 블록과 동일 패턴으로 추가

@@ -96,7 +96,7 @@
    > *"BDD 스타일 E2E 테스트 작성·검증 에이전트. FE 영역 한정. 천기망 FE 표준(`fe_reference_prompt.md`) 준수. Vitest 또는 Playwright 후보."*
 3. harness Phase 1–6 자동 실행.
 4. 산출물 위치 확인:
-   - `.claude/agents/agent-tester.md` (실제 파일은 `.private-config/claude/claude-agents/`)
+   - `.claude/agents/agent-tester.md` (실제 파일은 `.private-config/martial-world/claude/claude-agents/`)
    - `.claude/skills/{생성된-스킬-이름}/SKILL.md`
    - `_workspace/01_*.md` (중간 산출물)
 
@@ -111,7 +111,7 @@
 | 3 | BE 영역 침범 여부 | BE 미결정 단계라면 BE 검토 항목 미포함 |
 | 4 | Closure Discipline 인지 | 커밋 메시지 초안 형식 호환 (vibe-coding-flow §6) |
 | 5 | Synchronous Update 인지 | 변경 시 SSOT 역전파 절차 인지 |
-| 6 | symlink 인지 | `.claude/agents/` 가 `.private-config/claude/claude-agents/` 의 symlink 임을 알고 실제 파일 경로 정정 |
+| 6 | symlink 인지 | `.claude/agents/` 가 `.private-config/martial-world/claude/claude-agents/` 의 symlink 임을 알고 실제 파일 경로 정정 |
 | 7 | 라이선스 표기 | frontmatter 다음 줄에 HTML 주석 1줄: `<!-- Proprietary — Copyright © 2026 홍혁준. See LICENSE. -->` (사용자 직영·harness 자동 생성 모두 동일 — 표기 표준 2026-04-30 확정) |
 
 검증 실패 항목은 **수동 보정** → [harness-state.md](harness-state.md) 변경 이력에 사유 기록.
@@ -145,20 +145,20 @@
 
 | 하네스 기본 위치 | 천기망 실제 위치 | 비고 |
 |----------------|----------------|------|
-| `.claude/agents/{name}.md` | `.private-config/claude/claude-agents/{name}.md` | symlink 통해 `.claude/agents/` 노출 |
-| `.claude/skills/{name}/SKILL.md` | `.private-config/claude/claude-skills/{name}/SKILL.md` | **신규 디렉토리** — Phase 1 도입 시 결정 |
+| `.claude/agents/{name}.md` | `.private-config/martial-world/claude/claude-agents/{name}.md` | symlink 통해 `.claude/agents/` 노출 |
+| `.claude/skills/{name}/SKILL.md` | `.private-config/martial-world/claude/claude-skills/{name}/SKILL.md` | **신규 디렉토리** — Phase 1 도입 시 결정 |
 | `_workspace/{phase}_{agent}_{artifact}.{ext}` | `.private-config/shared/prompt/_workspace/...` 또는 `prompt/plan/<topic>/_workspace/...` | **위치 결정 보류** — Phase 2 시점에 확정 |
 
 **BE 산출물 위치 (2026-05-01 BE 사이클 후 추가)**:
 
 | 산출물 | 위치 |
 |---|---|
-| BE 코디네이터 / 리뷰어 | `.private-config/claude/claude-agents/agent-backend{,-reviewer}.md` |
+| BE 코디네이터 / 리뷰어 | `.private-config/martial-world/claude/claude-agents/agent-backend{,-reviewer}.md` |
 | BE 단일 기준점 (SSOT) | `.private-config/shared/prompt/read_only/backend/be_reference_prompt.md` |
 | BE 작업 템플릿 | `.private-config/shared/prompt/read_only/backend/be_{develop,improvement,review}_prompt.md` |
 | BE 아키텍처 공개 가이드 | `docs/readme/be-architecture.md` (FE 와 대칭) |
 | BE 멀티 모듈 가이드 | `docs/readme/be-multimodule-guide.md` (Gradle Groovy DSL settings.gradle / build.gradle 예시 포함) |
-| BE 트리거 등록 | `.private-config/claude/CLAUDE.md` §백엔드 개발 |
+| BE 트리거 등록 | `.private-config/martial-world/claude/CLAUDE.md` §백엔드 개발 |
 | BE 코드 위치 (도메인 설계 사이클 후) | `backend/` 하위 멀티 모듈 — 상세 구조는 [`be-architecture.md`](../be-architecture.md) + [`be-multimodule-guide.md`](../be-multimodule-guide.md) (실무 가이드) 단일 출처 참조 |
 
 ### 4.2 명명 규칙 (천기망 기존 패턴 우선)

@@ -105,10 +105,10 @@ env_fallback() {
 
 info "프라이빗 설정 심볼릭 링크 초기화 시작"
 
-link ".private-config/claude/claude-agents"   ".claude/agents"
-link ".private-config/claude/claude-artifact" ".claude/artifact"
-link ".private-config/claude/CLAUDE.md"       ".claude/CLAUDE.md"
-link ".private-config/frontend/env/.env.dev"  "frontend/.env.dev"
+link ".private-config/martial-world/claude/claude-agents"   ".claude/agents"
+link ".private-config/martial-world/claude/claude-artifact" ".claude/artifact"
+link ".private-config/martial-world/claude/CLAUDE.md"       ".claude/CLAUDE.md"
+link ".private-config/martial-world/frontend/env/.env.dev"  "frontend/.env.dev"
 
 env_fallback
 

@@ -577,8 +577,8 @@ dependencies {
 
 - BE 아키텍처 결정 SSOT: [be-architecture.md](./be-architecture.md)
 - BE 단일 기준점 (private): `.private-config/shared/prompt/read_only/backend/be_reference_prompt.md`
-- BE 코디네이터: `.claude/agents/agent-backend.md` (symlink → `.private-config/claude/claude-agents/`)
-- BE 리뷰어: `.claude/agents/agent-backend-reviewer.md` (symlink → `.private-config/claude/claude-agents/`)
+- BE 코디네이터: `.claude/agents/agent-backend.md` (symlink → `.private-config/martial-world/claude/claude-agents/`)
+- BE 리뷰어: `.claude/agents/agent-backend-reviewer.md` (symlink → `.private-config/martial-world/claude/claude-agents/`)
 - 메타 워크플로우: `.private-config/shared/prompt/read_only/vibe-coding-flow.md`
 - ArchUnit: https://www.archunit.org/
 - Gradle Groovy DSL: https://docs.gradle.org/current/userguide/groovy_build_script_primer.html

@@ -43,9 +43,9 @@
 
 | 메인에서 보이는 경로 | → | 실제 위치 (프라이빗 저장소 안) |
 |---|---|---|
-| `.claude/CLAUDE.md` | → | `.private-config/claude/CLAUDE.md` |
-| `.claude/agents/` | → | `.private-config/claude/claude-agents/` |
-| `.claude/artifact/` | → | `.private-config/claude/claude-artifact/` |
+| `.claude/CLAUDE.md` | → | `.private-config/martial-world/claude/CLAUDE.md` |
+| `.claude/agents/` | → | `.private-config/martial-world/claude/claude-agents/` |
+| `.claude/artifact/` | → | `.private-config/martial-world/claude/claude-artifact/` |
 
 프라이빗 저장소 내부 폴더 구성(참고):
 
@@ -228,7 +228,7 @@ git config status.submoduleSummary true
 
 ```
 .claude/agents  ─┐
-                 ├─▶  .private-config/claude/claude-agents/  (원본)
+                 ├─▶  .private-config/martial-world/claude/claude-agents/  (원본)
 .claude/...     ─┘         ↑ 실제 파일이 있는 곳
 ```
 
@@ -260,11 +260,11 @@ git config status.submoduleSummary true
 
 ```bash
 ls -la .claude/agents
-# lrwxr-xr-x ... .claude/agents -> ../.private-config/claude/claude-agents
+# lrwxr-xr-x ... .claude/agents -> ../.private-config/martial-world/claude/claude-agents
 #  ^ l 로 시작하면 심링크 (s 로 끝나는 권한 + 화살표 표기)
 
 readlink .claude/agents
-# ../.private-config/claude/claude-agents
+# ../.private-config/martial-world/claude/claude-agents
 ```
 
 ---
@@ -367,7 +367,7 @@ echo "/docs/prompt" >> .gitignore
 ```bash
 # 1단계: 심링크를 통해 그냥 평소처럼 수정
 vim .claude/CLAUDE.md
-# ↑ 실제로는 .private-config/claude/CLAUDE.md 가 수정됨
+# ↑ 실제로는 .private-config/martial-world/claude/CLAUDE.md 가 수정됨
 
 # 프라이빗 저장소에 커밋
 cd .private-config
@@ -388,7 +388,7 @@ git push
 
 ### 시나리오 C. 파일을 **삭제**하고 싶다
 
-예: 더 이상 쓰지 않는 `.private-config/claude/claude-artifact/old.tsx` 제거
+예: 더 이상 쓰지 않는 `.private-config/martial-world/claude/claude-artifact/old.tsx` 제거
 
 ```bash
 # 1단계: 프라이빗 저장소에서 삭제
@@ -455,7 +455,7 @@ git push
 ```
 내가 vim .claude/CLAUDE.md 로 수정
   ↓ (심링크를 따라감)
-실제로는 .private-config/claude/CLAUDE.md 가 수정됨
+실제로는 .private-config/martial-world/claude/CLAUDE.md 가 수정됨
   ↓
 .private-config 는 독립 저장소이므로 그 변경은
 "메인 프로젝트"의 git 입장에서는 그냥 "서브모듈 내부 변경"으로만 보임
@@ -556,12 +556,12 @@ git submodule update --remote .private-config
 |---|---|---|---|
 | 1. 공개 기본값 | `frontend/.env` | 공개 (커밋) | 권한 없이도 앱이 크래시 없이 기동되는 최저선 |
 | 2. 공개 템플릿 | `frontend/.env.example` | 공개 (커밋) | 전체 키 목록 + 더미값, 권한 없으면 `frontend/.env.dev` 로 복사되어 사용 |
-| 3. 실제 비밀값 | `.private-config/frontend/env/.env.dev` | 프라이빗 | 실제 API 키 · OAuth Secret — 서브모듈에만 존재 |
+| 3. 실제 비밀값 | `.private-config/martial-world/frontend/env/.env.dev` | 프라이빗 | 실제 API 키 · OAuth Secret — 서브모듈에만 존재 |
 
 **[`scripts/init-private.sh`](../../scripts/init-private.sh) 자동 분기**:
 
 ```
-서브모듈 존재  →  frontend/.env.dev  ─symlink→  .private-config/frontend/env/.env.dev
+서브모듈 존재  →  frontend/.env.dev  ─symlink→  .private-config/martial-world/frontend/env/.env.dev
 서브모듈 부재  →  frontend/.env.dev  ─copy──→  frontend/.env.example   (Mock 모드)
 ```
 
