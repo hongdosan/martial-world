@@ -1,5 +1,6 @@
 # dependencies (FE 자산은 frontend/ 하위 — 2026-05-08 모노레포 이전)
 /frontend/node_modules
+/node_modules
 /.pnp
 .pnp.js
 

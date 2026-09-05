@@ -176,7 +176,7 @@ harness Phase 7 패턴을 차용한 변경 이력. 모든 진화 변경은 *날�
 - 메타 워크플로우: `.private-config/shared/prompt/read_only/vibe-coding-flow.md` *(private)*
 - FE 단일 기준점: `.private-config/shared/prompt/read_only/frontend/fe_reference_prompt.md` *(private)*
 - BE 단일 기준점: `.private-config/shared/prompt/read_only/backend/be_reference_prompt.md` *(private)*
-- 에이전트 디렉토리: [`.claude/agents/`](../../../.claude/agents/) (symlink → `.private-config/claude/claude-agents/`)
+- 에이전트 디렉토리: [`.claude/agents/`](../../../.claude/agents/) (symlink → `.private-config/martial-world/claude/claude-agents/`)
 - 코드 아키텍처: [fe-architecture.md](../fe-architecture.md)
 - 프라이빗 설정 관리: [private-config.md](../private-config.md)
 - Harness 도입 가이드: [harness-integration.md](./harness-integration.md)
