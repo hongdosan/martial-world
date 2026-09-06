@@ -32,6 +32,7 @@
 | M6 | 2026-09-06 | **`master` 브랜치는 legacy 봉인 유지** | 룰셋 15185865 이 update/creation/deletion 자체 차단 + 15185892 가 github-pages 배포 요구. bypass 불가. 활성 워크플로우 = `develop` (default) + `release` (배포). master 는 사용되지 않음 → 룰셋 삭제 (destructive/영구) 하지 않고 그대로 |
 | M7 | 2026-09-06 | ~~Gradle Composite Build 등록은 backend/ Gradle 셋업 후 별도 사이클~~ → **번복 (M8 로 재결정)** | 사용자 재검토 (*"모듈로 안되어 있고 그냥 단순히 폴더로 구성되어 있는 것 같은데"*) 후 결정 재고 |
 | M8 | 2026-09-06 | **최소 Gradle 스켈레톤 즉시 셋업 (M7 번복)** — martial-world 에 `settings.gradle` (`rootProject.name = 'martial-world'` + 도메인 미확정 주석) + 우산 `includeBuild('martial-world')` 추가 | 사용자 실제 관찰 (우산 IDE 에서 폴더로 보임) 후 지시 위임 → 스켈레톤 비용 거의 0, subproject 없어도 Composite Build 인식 (`./gradlew projects` 검증: `Included build ':martial-world'`). 도메인 확정 후 `include(':backend', ...)` 만 추가 = 재구조 비용 0 |
+| M9 | 2026-09-06 | **`.private-config` 서브 서비스 스텁 root-level 배치 관행 확립** | martial-life 편입 검토 결과 — sub-service (`martial-life`) 도 우산 폴더 (`.private-config/martial-arts/martial-life/`) 하위가 아닌 root-level (`.private-config/martial-life/`) 로 배치. 근거: (1) `martial-world` 도 root-level (2) `heries` 도 root-level (3) 격리 원칙 = 각 서비스가 자체 소유 영역. 앞으로 추가 sub-service (예: martial-legend) 도 root-level 스텁 |
 
 ## 산출물
 
@@ -240,10 +241,12 @@ CLAUDE.md 에 이미 적힌 내용은 재기술 금지.
   · 격리 사전 방어 완료 (Serena ignored_paths / pull-first / 천기망 측 §1.1 / 서브모듈 README)
   · 천기망 측 작업 0
   · 네임스페이스 마이그레이션 완전 closure (2026-09-06 오전) — 배포 정상 (https://hongdosan.github.io/martial-world/ 200 OK)
-  · 우산 저장소 (hongdosan/martial-arts) submodule 편입 (2026-09-06 오후) — 613da63 @ umbrella main
+  · 우산 저장소 (hongdosan/martial-arts) submodule 편입 (2026-09-06 오후) — 95966df @ umbrella main (pointer bump 후)
   · 워킹 카피 권장 경로 = ~/hongdosan-workspace/martial-arts/martial-world/ (우산 하위)
   · Gradle Composite Build 등록 완료 (settings.gradle 스켈레톤 + includeBuild — M8) — ./gradlew projects 에서 Included build ':martial-world' 인식
   · backend/ 하위 도메인 모듈은 Phase 3 도메인 식별 후 include (재구조 비용 0)
+  · .private-config/martial-life/ 스텁 편입 완료 (c396cac @ submodule main — 트리 + 용도 표 + 격리 원칙 각주 정합화). 우산 저장소 .private-config pointer bump 는 우산 소유자 결정 영역
+  · Sub-service 스텁 배치 관행 = root-level (M9)
 ```
 
 ## 참고
