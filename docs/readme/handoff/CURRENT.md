@@ -30,7 +30,8 @@
 | M4 | 2026-09-06 | **release 브랜치 fast-forward push = 워크트리 손대지 않고 `git push origin develop:release`** | 로컬 checkout 불필요. release 가 develop 조상 확인 (`git log --left-right origin/release...origin/develop` 좌측 0건) 후 remote-only fast-forward |
 | M5 | 2026-09-06 | **우산 저장소 편입 방식 = git submodule (Option B)** | martial-life 는 monorepo 흡수 (Option A) 방식이지만 martial-world 는 이력이 무겁고 배포 workflow (GH Pages release) 도 별개라 submodule 이 더 자연스러움. 독립 저장소 유지 = 배포/이력 완전 보존. destructive 최소 |
 | M6 | 2026-09-06 | **`master` 브랜치는 legacy 봉인 유지** | 룰셋 15185865 이 update/creation/deletion 자체 차단 + 15185892 가 github-pages 배포 요구. bypass 불가. 활성 워크플로우 = `develop` (default) + `release` (배포). master 는 사용되지 않음 → 룰셋 삭제 (destructive/영구) 하지 않고 그대로 |
-| M7 | 2026-09-06 | **Gradle Composite Build 등록은 backend/ Gradle 셋업 후 별도 사이클** | 지금 `includeBuild('martial-world')` 추가 시 martial-world/settings.gradle 부재로 빌드 실패. martial-world/backend/ 는 BE Phase 6-13 표준 정의는 완료했으나 도메인 미확정 상태 빈 폴더 → 도메인 식별 (Phase 3) 후 첫 도메인 모듈 생성 + settings.gradle 셋업 시 자연스럽게 추가 |
+| M7 | 2026-09-06 | ~~Gradle Composite Build 등록은 backend/ Gradle 셋업 후 별도 사이클~~ → **번복 (M8 로 재결정)** | 사용자 재검토 (*"모듈로 안되어 있고 그냥 단순히 폴더로 구성되어 있는 것 같은데"*) 후 결정 재고 |
+| M8 | 2026-09-06 | **최소 Gradle 스켈레톤 즉시 셋업 (M7 번복)** — martial-world 에 `settings.gradle` (`rootProject.name = 'martial-world'` + 도메인 미확정 주석) + 우산 `includeBuild('martial-world')` 추가 | 사용자 실제 관찰 (우산 IDE 에서 폴더로 보임) 후 지시 위임 → 스켈레톤 비용 거의 0, subproject 없어도 Composite Build 인식 (`./gradlew projects` 검증: `Included build ':martial-world'`). 도메인 확정 후 `include(':backend', ...)` 만 추가 = 재구조 비용 0 |
 
 ## 산출물
 
@@ -119,7 +120,7 @@ a55ad62 (umbrella)      chore: add martial-world as submodule (multi-module 편�
 
 - **`.private-config/martial-arts/README.md` 스텁 건드리지 X** — 별도 프로젝트 (`hongdosan/martial-arts` 우산) 예약 (M2). *단 2026-09-06 부로 우산 저장소가 실제 활성화되었고 martial-world 를 submodule 로 참조 (M5). 스텁 README 는 여전히 우산 소유 — 우산 저장소 쪽에서 관리*
 - **우산 저장소 (`hongdosan/martial-arts`) 는 별도 프로젝트** — martial-world 는 submodule 참조되지만 소유는 우산 소유자. 우산의 `.gitmodules` / `settings.gradle` / `.idea/*` 등 파일은 우산 소유자 결정 (M5)
-- **`martial-world/backend/` Gradle 셋업 = Phase 3 도메인 식별 후** — 지금 우산에 `includeBuild('martial-world')` 추가 시 빌드 실패 (M7)
+- **`martial-world/backend/` 하위 도메인 모듈 = Phase 3 도메인 식별 후** — 지금은 스켈레톤 (`settings.gradle` root only, `include` 라인 없음, M8). Phase 3 후 `include(':backend:<domain>:adapter', ...)` 추가
 - **`master` 룰셋 삭제 금지** — 봉인된 legacy 브랜치. 룰셋 삭제는 destructive/영구 (M6)
 - **`shared/` 를 `martial-world/` 아래로 옮기지 X** — c11f8e7 이동 scope 벗어남 (M3)
 - **release 브랜치 force push 금지** — fast-forward push 만 사용 (M4). release 는 항상 develop 조상이어야 함
@@ -239,9 +240,10 @@ CLAUDE.md 에 이미 적힌 내용은 재기술 금지.
   · 격리 사전 방어 완료 (Serena ignored_paths / pull-first / 천기망 측 §1.1 / 서브모듈 README)
   · 천기망 측 작업 0
   · 네임스페이스 마이그레이션 완전 closure (2026-09-06 오전) — 배포 정상 (https://hongdosan.github.io/martial-world/ 200 OK)
-  · 우산 저장소 (hongdosan/martial-arts) submodule 편입 (2026-09-06 오후) — a55ad62 @ umbrella main
+  · 우산 저장소 (hongdosan/martial-arts) submodule 편입 (2026-09-06 오후) — 613da63 @ umbrella main
   · 워킹 카피 권장 경로 = ~/hongdosan-workspace/martial-arts/martial-world/ (우산 하위)
-  · Gradle Composite Build 등록 (includeBuild) 은 backend/ Gradle 셋업 후 별도 사이클
+  · Gradle Composite Build 등록 완료 (settings.gradle 스켈레톤 + includeBuild — M8) — ./gradlew projects 에서 Included build ':martial-world' 인식
+  · backend/ 하위 도메인 모듈은 Phase 3 도메인 식별 후 include (재구조 비용 0)
 ```
 
 ## 참고
