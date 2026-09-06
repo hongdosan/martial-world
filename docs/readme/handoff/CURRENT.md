@@ -1,175 +1,220 @@
-# Handoff — 2026-09-05 — martial-arts → martial-world 네임스페이스 마이그레이션 (진행 중)
+# Handoff — 2026-09-06 — martial-arts → martial-world 네임스페이스 마이그레이션 closure
 
 <!-- Proprietary — Copyright © 2026 홍혁준. See LICENSE. -->
 
 > Tier 2 (Document & Clear). 본 문서는 *fact* 가 아닌 **hypothesis** — 새 세션은 인용된 파일을 직접 Read 도구로 읽고 코드/실제 상태와 대조 검증한 후 작업을 이어간다.
 >
-> **STATUS — 네임스페이스 마이그레이션 부분 완료** / README.md 대량 정정 + GH Pages 복구 + develop→release merge ⏳ 대기
+> **STATUS — 네임스페이스 마이그레이션 완전 closure ✅** / Phase 3 (DDD Strategic) ⏳ 대기 (변동 없음)
 >
 > **선행 사이클 history**: `git log -p docs/readme/handoff/CURRENT.md` (본문) + [`../harness/harness-state.md`](../harness/harness-state.md) 변경 이력 (인덱스). *dated 파일 정책 폐기 — 2026-05-16~*
 
 ## Summary
 
-`hongdosan/martial-arts` → `hongdosan/martial-world` GitHub 리네임 후속 정합화. **2 세션 누적**, 본 세션은 사용량 여유 부족으로 **README.md 대량 정정 / GH Pages 복구 / release merge = deferred**. 서브모듈 (`.private-config`) 은 이번에 잔여 self-reference 6개 파일 정정 + 상대경로 (`../shared/`) 복구까지 완료.
+`hongdosan/martial-arts` → `hongdosan/martial-world` GitHub 리네임 후속 정합화 **3 세션 총괄 closure**. 어제 (09-05) §Deferred 5건 오늘 순차 실행 완료. **배포 복구 확인** (https://hongdosan.github.io/martial-world/ 200 OK, asset 경로 `/martial-world/` prefix 정합).
 
-### 완료 (이전 세션 + 본 세션 누적)
+기획 사이클 Phase 3 (DDD Strategic Design) 진입 절차는 **변동 없음** — 2026-05-17 closure 상태 그대로 대기.
 
-**이전 세션:**
-- 로컬 폴더 `martial-arts/` → `martial-world/` rename → Bash cwd 무효화로 세션 종료
-- `.idea/vcs.xml` 원복 (상위 `$PROJECT_DIR$` Git 매핑 복구)
-- `.gitignore` `/node_modules` 추가 (root 레벨 재발 방지)
-- root `node_modules/` 삭제
-- 서브모듈 (`.private-config`) 에 `martial-world/{claude,frontend,backend}` 이동 완료 (`c11f8e7`)
-- 메인 저장소 서브모듈 포인터 갱신 (`864661a`)
+## Key Decisions (본 마이그레이션 사이클 — 참고)
 
-**본 세션 (2026-09-05):**
-- `chore: martial-arts → martial-world 네임스페이스 마이그레이션 잔여 정리` (`16fe702`) — .iml rename / .idea/modules.xml / .gitignore / docs stale 2건
-- `chore: .serena/project.yml — project_name 갱신 + Serena 스키마 자동 업그레이드` (`503d84d`)
-- `chore: martial-world/ 하위 self-reference + ../shared/ 상대경로 정정` (서브모듈 `966ea51`) — CLAUDE.md + agent-{backend,backend-reviewer,frontend,frontend-reviewer,game-master}.md 6개 파일. self-reference `.private-config/claude/...` → `.private-config/martial-world/claude/...` + `../shared/` → `../../shared/` (CLAUDE.md) / `../../shared/` → `../../../shared/` (agent-*.md)
-- `chore: bump .private-config submodule to 966ea51` (`d18a865`)
+> 기획 사이클 Key Decisions #1~#18 은 `git log -p docs/readme/handoff/CURRENT.md` 위임 (마이그레이션은 정합화 작업 — 헌장 무관).
 
-### Deferred (다음 세션 우선순위)
-
-| # | 항목 | 위치 | 비고 |
+| # | 일자 | 결정 | 근거 |
 |---|------|------|------|
-| **1** | **`.private-config/README.md` 대량 정정** | 서브모듈 root | 별도 사이클 필요. 아래 §"README.md 정정 배치" 참조 |
-| 2 | `frontend/vite.config.ts:6` base | 메인 | `'/martial-arts/'` → `'/martial-world/'` |
-| 3 | GH Pages source legacy → workflow | GitHub | `gh api repos/hongdosan/martial-world/pages -X PUT -f build_type=workflow` |
-| 4 | `develop → release` fast-forward merge push | 메인 | release 브랜치 67 커밋 뒤처짐 → workflow trigger |
-| 5 | https://hongdosan.github.io/martial-world/ 접속 확인 | 배포 | workflow 성공 후 |
-| 6 | `harness-state.md` 변경 이력 1행 추가 | 메인 | 본 마이그레이션 사이클 총괄 (2행 — 이전 세션 + 본 세션) |
-| 7 | `.private-config/martial-world/claude/CLAUDE.md` 변경 이력 1행 | 서브모듈 | 이번 마이그레이션 record |
-| 8 | 서브모듈 `../../docs/` 상대경로 정합 (선택) | 서브모듈 | 사전 존재 broken 경로 — 별도 사이클로 미룰 것 |
+| M1 | 2026-09-05 | **저장소 이름 `martial-arts-config` 유지** | 서브모듈 URL / SHA / clone 명령 안정성 (결정 #18 재확인). GitHub repo 만 리네임 (`martial-arts` → `martial-world`), 서브모듈 저장소는 그대로 |
+| M2 | 2026-09-05 | **`.private-config/martial-arts/README.md` 스텁은 다른 프로젝트 예약** | `hongdosan/martial-arts` (무협 통합 서비스 우산 — martial-life 등) 예약 스텁. 천기망 = `martial-world/`. 우산 스텁은 건드리지 X |
+| M3 | 2026-09-05 | **`shared/` 는 `martial-world/` 아래로 이동하지 않고 root 유지** | c11f8e7 이동 scope 준수 (`claude/frontend/backend` 만). `shared/` 는 향후 다른 프로젝트와의 진짜 공용 자료 가능성 여지 |
+| M4 | 2026-09-06 | **release 브랜치 fast-forward push = 워크트리 손대지 않고 `git push origin develop:release`** | 로컬 checkout 불필요. release 가 develop 조상 확인 (`git log --left-right origin/release...origin/develop` 좌측 0건) 후 remote-only fast-forward |
 
-## README.md 정정 배치 (다음 세션 실행)
+## 산출물
 
-`.private-config/README.md` 는 c11f8e7 (namespace) 반영이 미완. 아래를 참조해 순차 편집:
+### Commits 본 라운드 (3 세션 총괄)
 
-### URL / repo 참조
-
-- 라인 5, 240: `[martial-arts](https://github.com/hongdosan/martial-arts)` → `[martial-world](https://github.com/hongdosan/martial-world)`
-- 라인 121: `git clone --recursive https://github.com/hongdosan/martial-arts.git` → `.../martial-world.git`
-- 라인 123: `cd martial-arts` → `cd martial-world`
-- 라인 241: docs URL host `hongdosan/martial-arts` → `hongdosan/martial-world`
-
-### 디렉토리 구조 (line 26-69) — 트리 재구조
-
-현재 파일 시스템 실체:
 ```
-.private-config/
-├── README.md
-├── heries/                    # H-eries
-├── martial-arts/README.md    # 별도 우산 스텁 (건드리지 X)
-├── martial-world/             # 천기망
-│   ├── backend/
-│   ├── claude/{CLAUDE.md, claude-agents/, claude-artifact/, plan/}
-│   └── frontend/env/
-└── shared/{guideline/, issue/, prompt/}   # 천기망 공용 (root 유지)
+# 이전 세션 (2026-05-16/17 이전, 서브모듈 이동 완료 상태)
+c11f8e7 (submodule)  chore: namespace martial-world config under martial-world/ (was repo root)
+864661a (main)       chore: bump .private-config submodule to c11f8e7 (martial-world namespace)
+99c0f48 (main)       chore: update .private-config path references for martial-world/ namespace migration
+
+# 2026-09-05 (develop)
+16fe702  chore: martial-arts → martial-world 네임스페이스 마이그레이션 잔여 정리
+503d84d  chore: .serena/project.yml — project_name 갱신 + Serena 스키마 자동 업그레이드
+966ea51 (submodule)  chore: martial-world/ 하위 self-reference + ../shared/ 상대경로 정정
+d18a865  chore: bump .private-config submodule to 966ea51 (agent self-reference 정정)
+e2b7fdc  docs: 네임스페이스 마이그레이션 부분 완료 핸드오프 (CURRENT.md 롤링 + harness-state.md 1행)
+
+# 2026-09-06 (develop)
+8a74be7 (submodule)  docs: README.md 네임스페이스 마이그레이션 정합 + CLAUDE.md 변경 이력 1행
+3403cd4  chore: 네임스페이스 마이그레이션 마무리 — vite base + .private-config bump
+# (본 커밋 = 마이그레이션 closure 핸드오프 — CURRENT 롤링 + harness-state.md 1행)
 ```
 
-트리 표를 위와 정합화하고, 아래 표들 (line 73~90 소유자·격리 표, line 100~105 symlink 표) 을 `martial-world/` prefix 로 갱신.
+### 배포 인프라 상태 변경
 
-### 워크플로우 예시 (line 147, 183~205)
+- GH Pages `build_type`: `legacy` → `workflow` (2026-09-06 `gh api` 로 전환)
+- `release` 브랜치: `origin/develop` fast-forward push 로 develop 과 동기화 (bypass protected refs)
+- Workflow: `Deploy Vite + React to Pages` 성공 (34006608606 / 39s)
+- 배포 URL: https://hongdosan.github.io/martial-world/ (200 OK, HTML asset 경로 `/martial-world/` prefix)
 
-- `claude/claude-agents/agent-backend.md` → `martial-world/claude/claude-agents/agent-backend.md`
-- `### \`claude/\` 에 추가` → `### \`martial-world/claude/\` 에 추가` (동일 패턴 frontend/backend)
-- `.private-config/backend/...` (line 204) → `.private-config/martial-world/backend/...`
+### 신규 / 갱신 파일 (본 사이클 총괄)
 
-### 주의사항 (line 216-217)
+| 파일 | 변경 |
+|---|---|
+| 로컬 폴더 | `martial-arts/` → `martial-world/` (Bash cwd 무효화로 세션 교체 트리거) |
+| `.idea/vcs.xml` | 원복 (상위 `$PROJECT_DIR$` Git 매핑 복구) |
+| `.idea/modules.xml` | `martial-world.iml` 포인터 |
+| `martial-world.iml` | rename from `martial-arts.iml` |
+| `.gitignore` | `/node_modules` 추가 (root 레벨 재발 방지) |
+| `.serena/project.yml` | `project_name: martial-world` + Serena 스키마 자동 업그레이드 |
+| `docs/readme/harness/harness-state.md` | stale 경로 1건 + 변경 이력 2행 (09-05 부분 완료 + 09-06 closure) |
+| `frontend/.env.example` | `.private-config/martial-world/frontend/` |
+| `frontend/vite.config.ts` | base `/martial-arts/` → `/martial-world/` |
+| `.private-config` 포인터 | `c11f8e7 → 966ea51 → 8a74be7` (3회 bump) |
+| `.private-config/README.md` | 대량 정정 (트리 재구조 / 용도 표 / symlink 표 / 워크플로우 / 관련 문서 URL) |
+| `.private-config/martial-world/claude/CLAUDE.md` | self-reference + `../shared/` 상대경로 + 변경 이력 1행 |
+| `.private-config/martial-world/claude/claude-agents/*.md` | 5개 파일 self-reference + `../../shared/` |
+| `docs/readme/handoff/CURRENT.md` | 본 핸드오프 (롤링 덮어쓰기) |
 
-- `(\`claude/\` / \`shared/\` / \`frontend/\` / \`backend/\`)` → `(\`martial-world/\` / \`shared/\`)`
-- `shared/` 는 root 유지 (`martial-world/` 미이동 확인됨 — 이전 커밋 `c11f8e7` scope 확인)
+## Phase 3 진입 절차 (변동 없음 — 2026-05-17 상태 상속)
 
-### skip 대상
+> vision.md §5.1 헌법 (행위 → 도메인) 비협상 준수.
 
-- `shared/prompt/plan/fe-vite-migration/*.md` — 역사적 plan 문서. 당시 결정 재구성 방지 위해 유지
-- `.private-config/martial-arts/README.md` 스텁 — 다른 프로젝트 (`hongdosan/martial-arts` 우산) 예약. 건드리지 X
+### 검증 단계
 
-## 결정된 핵심 영역
+1. **vision.md §3.3 narrative + §4.1.4 BC 가설 6개** 직접 Read → 사용자 재확인
+2. **requirements-phase-1.md §3 FR 40+ 건** 직접 Read → Phase 3 입력
+3. **vibe-coding-flow §4 정책 사전 검토** — 새 plan 디렉토리 생성 시 임계값 (3개)
 
-### 네임스페이스 마이그레이션 원칙
+### Phase 3 본격 진입
 
-- **저장소 이름**: `martial-arts-config` (서브모듈) 는 그대로 유지 — URL/SHA/clone 명령 안정성 (결정 #18 재확인)
-- **`martial-arts/` vs `martial-world/`**: 서브모듈 root 의 `martial-arts/` 폴더는 별도 프로젝트 (`hongdosan/martial-arts` — 무협 통합 우산 예약) 스텁. 천기망 = `martial-world/`
-- **상대경로 복구**: c11f8e7 이동으로 `../shared/` 계열 링크 1레벨 위로 밀림 — 6개 agent 파일 이번 세션에 복구 완료. `../../docs/` 계열은 사전 broken 상태 → 별도 사이클 (docs/ 는 메인 저장소, submodule 상대경로로는 도달 불가능)
-
-### GH Pages 배포 (deferred)
-
-- release 브랜치 상태: develop 대비 67 커밋 뒤 — fast-forward merge 필요
-- Pages source: legacy → workflow 전환 필수 (`.github/workflows/static.yml` 이 trigger 가 되도록)
-- vite base: `'/martial-arts/'` → `'/martial-world/'` (repo path 변경 반영)
+1. **Event Storming 1인 변형** — FR 40+ 건을 시간순 이벤트로 재배열 (`사용자 → 행위 (DomainEvent)` 형태). §3.3 narrative = 흐름 검증 자료
+2. **Aggregate 후보 식별** — 이벤트 묶음 → Aggregate 경계
+3. **Bounded Context 식별** — Aggregate 묶음 → BC 경계. §4.1.4 가설 6개와 비교 검증 (합침 / 분리 / 추가). Phase 1 명세 범위 = BC 5개만 / Ranking 은 Phase 2 별도
+4. **Ubiquitous Language 사전 작성** — 강호 용어 (경지 / 심법 / 문파 / 기연 / 칭호 / ...) 정의 + 동의어 금지
+5. **Aggregate 행위 카탈로그** — 명령 (Command) + 이벤트 (Event) + 불변식 (Invariant)
+6. **Subdomain 분류** — Core / Supporting / Generic (vision.md §5.3 가설 검증)
+7. **산출물**: `docs/readme/planning/domain-phase-1.md` (vision.md §5.1.3 표 정합)
 
 ## Traps to Avoid
 
-- **서브모듈 push 순서**: 서브모듈 먼저 push → 메인 저장소 포인터 bump → 메인 push (2단계 커밋 원칙)
-- **README.md `shared/` 항목**: `shared/` 는 root 유지 (c11f8e7 scope 확인 — `claude/frontend/backend` 만 이동). `martial-world/shared/` 로 오정정 금지
-- **`.private-config/martial-arts/README.md` 건드리지 X** — 별도 프로젝트 예약 스텁
-- **`shared/prompt/plan/fe-vite-migration/*` 역사 문서 건드리지 X**
-- **release 브랜치 force push 금지** — fast-forward 로 충분 (67 커밋 순방향)
-- **develop protected bypass 유지** — 이미 push 됨, 롤백은 destructive
-- **`.private-config/heries/` 무관** (선행 원칙 유지)
-- **`.private-config` 작업 시 `git pull` 먼저** (선행 원칙 유지)
+- **`.private-config/martial-arts/README.md` 스텁 건드리지 X** — 별도 프로젝트 (`hongdosan/martial-arts` 우산) 예약 (M2)
+- **`shared/` 를 `martial-world/` 아래로 옮기지 X** — c11f8e7 이동 scope 벗어남 (M3)
+- **release 브랜치 force push 금지** — fast-forward push 만 사용 (M4). release 는 항상 develop 조상이어야 함
+- **vision.md §5.1 헌법 위반 금지** — Phase 3 진입 시 *DB → 도메인* / *화면 → 도메인* 금지. 행위가 먼저
+- **BC 가설 6개 = *최종* 으로 가정 X** — 합침 / 분리 / 추가 가능. Ranking 은 Phase 2 진입 시 정식화 (Phase 1 명세는 BC 5개)
+- **prototype entities 7종 = *최종 도메인* 으로 가정 X** — Bottom-Up 검증 재료 only
+- **User BC + CustomWorldview BC 분리 유지** — Generic ≠ Core
+- **싱글 플레이 / 수동 공유 흔들기 금지** — 단 *점수/진행도 read* 는 예외 허용 (§4.2 명시)
+- **MVP 범위 확장 금지** — 댓글 / 좋아요 / 의견 워크플로우 / 가져오기 병합 = Phase 1 비범위
+- **SSOT 갱신 사이클 선행** — vision.md / requirements 와 반대 결정 시도 시 그냥 코드 X
+- **"잘 모르겠다" 답변 = 정상** — 명시적 deferred 로 박기
+- **`.private-config/heries/` 무관** — 천기망 SSOT (BE/FE reference / 에이전트 정의) 가 참조하면 *도메인 결합* 발생
+- **`.private-config` 작업 시 `git pull` 먼저** — 두 작업자 공유 저장소
 
 ## Working Agreements (선행 상속)
 
-- 명시적 지시는 우회 없이 직접 실행 / 티키타카 대화 우선
+- 명시적 지시는 우회 없이 직접 실행
+- 외부 글은 원본 URL 만 (verbatim 사본 금지)
 - **2단계 commit** — 서브모듈 먼저, 메인이 포인터 갱신
+- **제안 → 확인 → 수정** 순차 진행
 - **Closure Discipline** — 커밋 메시지 SSOT 는 plan 의 *제안 커밋 메시지 초안*
-- Push 는 사용자 본인 진행 (단 서브모듈 push 는 2단계 필수이므로 Claude 진행)
+- **Synchronous Update** — SSOT 변경 시 영향 받는 참조처 동기화
 - 변경 이력은 [`harness-state.md`](../harness/harness-state.md) 단일 출처
-- **미래 처리보다 지금 사전 방지** (2026-05-16)
-- **`.private-config` 작업 시 `git pull` 먼저** (2026-05-16)
+- Push 는 **사용자 본인 진행** — Claude 는 commit 까지 (단 서브모듈 push / 배포 trigger 는 태스크 요구에 따라 진행)
+- **`agent-game-master` 사용자 직영 트랙**
+- **DDD 도메인 중심** — vision.md §5.1 헌법 비협상
+- **행위 명세 = 정말 중요** — Aggregate 행위 카탈로그 + BDD `Given/When/Then`
+- **Ubiquitous Language 강제** — 강호 용어 통일 (기획/화면/코드/DB)
+- **Phase 5 화면 = Claude 디자인 적극 활용**
+- **티키타카 대화 우선** — 옵션 다지선다 X
+- **모호함은 명시적 deferred 로 박기**
+- **미래 처리보다 지금 사전 방지** (2026-05-16) — 잠재 리스크는 deferred 하지 말고 비용 작으면 사전 박기
+- **`.private-config` 작업 시 `git pull` 먼저** (2026-05-16) — 천기망 + H-eries 두 작업자 공유 저장소
+
+## Relevant Files
+
+### 단일 출처 (SSOT)
+
+- [`vision.md`](../planning/vision.md) — **헌장**. 모든 후속 사이클 (Phase 3-5 / 4 Phase 구현) 의 상위 SSOT
+- [`requirements-phase-1.md`](../planning/requirements-phase-1.md) — Phase 2 산출물. Phase 3 도메인 모델링 직접 입력
+- [`be_reference_prompt.md`](../../../.private-config/shared/prompt/read_only/backend/be_reference_prompt.md) *(private)* — BE SSOT (Phase 6-13 완료)
+- [`fe_reference_prompt.md`](../../../.private-config/shared/prompt/read_only/frontend/fe_reference_prompt.md) *(private)* — FE SSOT (§1 모두 ✅, Storybook ⏳)
+- [`harness-state.md`](../harness/harness-state.md) — 변경 이력 단일 출처
+- [`vibe-coding-flow.md`](../../../.private-config/shared/prompt/read_only/vibe-coding-flow.md) *(private)* — 메타 워크플로우 SSOT
+- [`private-config.md`](../private-config.md) — 서브모듈 운영 가이드 (천기망 측 §1.1 격리 원칙 / §1.2 pull-first)
+- [`.private-config/README.md`](../../../.private-config/README.md) *(submodule)* — 공유 저장소 안내 (본 사이클 정정 완료)
+
+### Phase 3 도메인 모델링 입력
+
+- `vision.md §3.3` — Phase 1·2 사용자 흐름 narrative (Event Storming 입력 보조 자료)
+- `vision.md §4.1.4` — BC 가설 6개 (검증 대상)
+- `vision.md §5.1` — DDD 적용 정의 (3단계 헌법)
+- `vision.md §5.0` — DDD 용어 풀이 (11개)
+- `requirements-phase-1.md §3` — FR 7영역 40+ 건 (행위 → BC 도출 입력)
+- `requirements-phase-1.md §6` — 영역 ↔ BC 가설 매핑
+
+### Prototype 코드 (Bottom-Up 검증 재료 only — *결정 권한 X*)
+
+- `frontend/src/entities/{character,level,art,faction,fortune,misc,title}/` — 7종
+- `frontend/src/pages/codex/` — 메인 페이지 (511 LOC)
+- `frontend/src/features/{codex-export,defaults-restore,entry-edit,entry-filter,entry-reorder}/`
+
+### 선행 사이클 history
+
+> 2026-05-16~ *롤링 단일 파일 정책*. 직전 사이클 본문 = `git log -p docs/readme/handoff/CURRENT.md` / 사이클 인덱스 = [`../harness/harness-state.md`](../harness/harness-state.md) 변경 이력.
 
 ## Prompt for New Chat
 
 ```
-천기망 martial-arts → martial-world 네임스페이스 마이그레이션 마무리 사이클.
+천기망 기획 사이클 — Phase 3 도메인 모델링 (DDD Strategic Design) 을 시작한다.
 
-먼저 다음 파일을 Read 도구로 읽고 본 핸드오프 주장 검증:
-1. docs/readme/handoff/CURRENT.md (본 핸드오프)
-2. .private-config/README.md (정정 대상 원본)
-3. frontend/vite.config.ts (base 확인)
-4. docs/readme/harness/harness-state.md (변경 이력 정책)
+먼저 다음 파일을 Read 도구로 읽고 본 핸드오프의 주장을 검증해:
 
-검증 후 순서대로 진행:
+1. docs/readme/handoff/CURRENT.md (본 핸드오프 — SSOT)
+2. docs/readme/planning/vision.md (헌장 — §3.3 narrative / §4.1.4 BC 가설 6개 / §5.0 용어 / §5.1 헌법 / §5.3 매핑)
+3. docs/readme/planning/requirements-phase-1.md (Phase 3 입력 — §3 FR 7영역 / §6 BC 매핑)
+4. docs/readme/harness/harness-state.md (변경 이력 단일 출처)
+5. .private-config/shared/prompt/read_only/vibe-coding-flow.md §4 (메타 정책)
 
-[1단계] .private-config/README.md 대량 정정 (본 핸드오프 §"README.md 정정 배치" 참조):
-  · URL / repo 참조 (라인 5, 121, 123, 240, 241)
-  · 디렉토리 구조 트리 재구조 (line 26-69) — 실제 파일 시스템과 정합
-  · 소유자/격리 표 (line 73~90) 갱신
-  · symlink 표 (line 100~105) — martial-world/ prefix
-  · 워크플로우 예시 (line 147, 183~205)
-  · 주의사항 (line 216-217)
-  · shared/ 는 root 유지 (c11f8e7 scope) — 오정정 금지
-  · martial-arts/README.md 스텁 및 shared/prompt/plan/fe-vite-migration/* 는 skip
+CLAUDE.md 에 이미 적힌 내용은 재기술 금지.
 
-[2단계] 서브모듈 2단계 commit:
-  · cd .private-config && git pull → commit → push origin main
-  · 메인 저장소로 돌아와 git add .private-config → commit
-  · 커밋 메시지: chore: .private-config/README.md 네임스페이스 마이그레이션 정합
+검증 후 다음 순서로 진행:
 
-[3단계] frontend/vite.config.ts:6 base 정정:
-  · '/martial-arts/' → '/martial-world/'
+[1단계] vibe-coding-flow §4 정책 사전 검토:
+  · plan/ 2개 (fe-stack-closure / fe-vite-migration) — 새 plan 생성 시 3개 = 임계값
+  · 새 plan 디렉토리 명명 (planning-phase-3-domain/ 권장)
 
-[4단계] GH Pages source 전환:
-  · gh api repos/hongdosan/martial-world/pages -X PUT -f build_type=workflow
+[2단계] BC 가설 6개 사용자 재확인:
+  · Phase 1: BaseWorldview / CustomWorldview / User / Community / Feedback
+  · Phase 2: Ranking (Supporting Subdomain — Phase 2 진입 시 정식화)
+  · 합침 / 분리 / 추가 가능 여부 티키타카
 
-[5단계] develop → release fast-forward merge push:
-  · git checkout release && git merge --ff-only origin/develop && git push
-  · workflow trigger 후 https://hongdosan.github.io/martial-world/ 접속 확인
+[3단계] Phase 3 본격 진입 — Event Storming 1인 변형:
+  · requirements-phase-1.md §3 FR 40+ 건 → 시간순 이벤트 재배열
+  · vision.md §3.3 narrative 시나리오 = 흐름 검증 자료
+  · Aggregate 후보 식별 → BC 경계 도출
+  · Ubiquitous Language 사전 시작 (강호 용어)
+  · Aggregate 행위 카탈로그 (명령 + 이벤트 + 불변식)
 
-[6단계] harness-state.md 변경 이력 1행 추가:
-  · 이번 마이그레이션 사이클 (2 세션 총괄)
-
-[7단계] .private-config/martial-world/claude/CLAUDE.md 변경 이력 1행 추가:
-  · 서브모듈 정합 record
+[4단계] 산출물:
+  · docs/readme/planning/domain-phase-1.md (vision.md §5.1.3 표 정합)
 
 원칙 (반드시 준수):
-  · 서브모듈 push 순서: 서브모듈 먼저 → 메인 포인터 bump
-  · shared/ 는 root 유지 (오정정 금지)
-  · release 브랜치 force push 금지 (fast-forward)
-  · .private-config 작업 시 git pull 먼저
+  · vision.md §5.1 헌법 비협상 — 행위 → 도메인 (역방향 금지)
+  · DB / 화면 → 도메인 도출 = 금지
+  · prototype entities 7종 = Bottom-Up 검증 재료 only (결정 권한 X)
+  · 모호함 = 명시적 deferred 로 박기 (휘발 방지)
+  · 티키타카 우선 (옵션 다지선다 X)
   · agent-game-master 사용자 직영 트랙
+  · 미래 처리보다 지금 사전 방지 — 잠재 리스크 deferred 금지 (비용 작으면 사전 박기)
+  · .private-config/heries/ 무관 — 천기망 SSOT 참조 금지 (H-eries 영역)
+  · .private-config 작업 시 git pull 먼저 (두 작업자 공유 저장소)
+  · release 브랜치 = fast-forward push 만 (force push 금지)
+
+병행 트랙 (Phase 3 와 무관 — 자동 처리됨):
+  · .private-config = 천기망 + H-eries 공유 저장소 (heries/ 폴더 = H-eries 자체 관리)
+  · 격리 사전 방어 완료 (Serena ignored_paths / pull-first / 천기망 측 §1.1 / 서브모듈 README)
+  · 천기망 측 작업 0
+  · 네임스페이스 마이그레이션 완전 closure (2026-09-06) — 배포 정상 (https://hongdosan.github.io/martial-world/ 200 OK)
 ```
 
 ## 참고
@@ -180,4 +225,4 @@
 - BE 단일 기준점: `.private-config/shared/prompt/read_only/backend/be_reference_prompt.md` *(private)*
 - FE 단일 기준점: `.private-config/shared/prompt/read_only/frontend/fe_reference_prompt.md` *(private)*
 - 메타 워크플로우 SSOT: `.private-config/shared/prompt/read_only/vibe-coding-flow.md` *(private)*
-- 공유 저장소 안내: `.private-config/README.md` *(submodule — 본 사이클 정정 대상)*
+- 공유 저장소 안내: `.private-config/README.md` *(submodule — 본 사이클 정정 완료)*
