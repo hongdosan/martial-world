@@ -1,0 +1,8 @@
+rootProject.name = 'martial-world'
+
+// 도메인 미확정 상태 — Phase 3 (DDD Strategic Design) 완료 후 backend/ 하위
+// 헥사고날 도메인 모듈 (예: include(':backend:<domain>:adapter', ...)) 추가.
+// FE (frontend/) 는 Vite + npm 프로젝트로 Gradle 무관 — 본 파일에서 참조 X.
+//
+// 우산 저장소 (hongdosan/martial-arts) settings.gradle 에서 includeBuild('martial-world')
+// 로 Composite Build 참조 (Phase 6-13 BE 표준 정의 사이클 산출).
