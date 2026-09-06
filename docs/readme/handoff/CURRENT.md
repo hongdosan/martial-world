@@ -1,16 +1,20 @@
-# Handoff — 2026-09-06 — martial-arts → martial-world 네임스페이스 마이그레이션 closure
+# Handoff — 2026-09-06 — 네임스페이스 마이그레이션 closure + 우산 저장소 submodule 편입
 
 <!-- Proprietary — Copyright © 2026 홍혁준. See LICENSE. -->
 
 > Tier 2 (Document & Clear). 본 문서는 *fact* 가 아닌 **hypothesis** — 새 세션은 인용된 파일을 직접 Read 도구로 읽고 코드/실제 상태와 대조 검증한 후 작업을 이어간다.
 >
-> **STATUS — 네임스페이스 마이그레이션 완전 closure ✅** / Phase 3 (DDD Strategic) ⏳ 대기 (변동 없음)
+> **STATUS — 네임스페이스 마이그레이션 완전 closure ✅ + 우산 저장소 (`hongdosan/martial-arts`) submodule 편입 ✅** / Phase 3 (DDD Strategic) ⏳ 대기 (변동 없음)
+>
+> **⚠️ 워킹 카피 위치 변경** — 새 권장 경로 = `~/hongdosan-workspace/martial-arts/martial-world/` (우산 저장소 하위 submodule). 이전 위치 `~/IdeaProjects/martial-world/` 는 *stale* — 사용자 판단으로 삭제 또는 유지 (동일 저장소 duplicate clone).
 >
 > **선행 사이클 history**: `git log -p docs/readme/handoff/CURRENT.md` (본문) + [`../harness/harness-state.md`](../harness/harness-state.md) 변경 이력 (인덱스). *dated 파일 정책 폐기 — 2026-05-16~*
 
 ## Summary
 
 `hongdosan/martial-arts` → `hongdosan/martial-world` GitHub 리네임 후속 정합화 **3 세션 총괄 closure**. 어제 (09-05) §Deferred 5건 오늘 순차 실행 완료. **배포 복구 확인** (https://hongdosan.github.io/martial-world/ 200 OK, asset 경로 `/martial-world/` prefix 정합).
+
+**추가 사이클 (2026-09-06 오후) — 우산 저장소 편입**: `hongdosan/martial-arts` (무협 통합 서비스 우산, Gradle Composite Build) 하위에 `martial-world` 를 git submodule 로 등록 (`a55ad62 @ umbrella main`). Composite Build 등록 (`includeBuild('martial-world')` in `settings.gradle`) 은 `martial-world/backend/` Gradle 셋업 완료 후 별도 사이클 (현재 backend/ 는 도메인 미확정 빈 폴더 → 지금 추가 시 빌드 실패). **martial-world 저장소 자체는 완전 독립 유지** (배포 workflow / git 이력 / release 브랜치 그대로).
 
 기획 사이클 Phase 3 (DDD Strategic Design) 진입 절차는 **변동 없음** — 2026-05-17 closure 상태 그대로 대기.
 
@@ -24,6 +28,9 @@
 | M2 | 2026-09-05 | **`.private-config/martial-arts/README.md` 스텁은 다른 프로젝트 예약** | `hongdosan/martial-arts` (무협 통합 서비스 우산 — martial-life 등) 예약 스텁. 천기망 = `martial-world/`. 우산 스텁은 건드리지 X |
 | M3 | 2026-09-05 | **`shared/` 는 `martial-world/` 아래로 이동하지 않고 root 유지** | c11f8e7 이동 scope 준수 (`claude/frontend/backend` 만). `shared/` 는 향후 다른 프로젝트와의 진짜 공용 자료 가능성 여지 |
 | M4 | 2026-09-06 | **release 브랜치 fast-forward push = 워크트리 손대지 않고 `git push origin develop:release`** | 로컬 checkout 불필요. release 가 develop 조상 확인 (`git log --left-right origin/release...origin/develop` 좌측 0건) 후 remote-only fast-forward |
+| M5 | 2026-09-06 | **우산 저장소 편입 방식 = git submodule (Option B)** | martial-life 는 monorepo 흡수 (Option A) 방식이지만 martial-world 는 이력이 무겁고 배포 workflow (GH Pages release) 도 별개라 submodule 이 더 자연스러움. 독립 저장소 유지 = 배포/이력 완전 보존. destructive 최소 |
+| M6 | 2026-09-06 | **`master` 브랜치는 legacy 봉인 유지** | 룰셋 15185865 이 update/creation/deletion 자체 차단 + 15185892 가 github-pages 배포 요구. bypass 불가. 활성 워크플로우 = `develop` (default) + `release` (배포). master 는 사용되지 않음 → 룰셋 삭제 (destructive/영구) 하지 않고 그대로 |
+| M7 | 2026-09-06 | **Gradle Composite Build 등록은 backend/ Gradle 셋업 후 별도 사이클** | 지금 `includeBuild('martial-world')` 추가 시 martial-world/settings.gradle 부재로 빌드 실패. martial-world/backend/ 는 BE Phase 6-13 표준 정의는 완료했으나 도메인 미확정 상태 빈 폴더 → 도메인 식별 (Phase 3) 후 첫 도메인 모듈 생성 + settings.gradle 셋업 시 자연스럽게 추가 |
 
 ## 산출물
 
@@ -42,10 +49,15 @@ c11f8e7 (submodule)  chore: namespace martial-world config under martial-world/ 
 d18a865  chore: bump .private-config submodule to 966ea51 (agent self-reference 정정)
 e2b7fdc  docs: 네임스페이스 마이그레이션 부분 완료 핸드오프 (CURRENT.md 롤링 + harness-state.md 1행)
 
-# 2026-09-06 (develop)
-8a74be7 (submodule)  docs: README.md 네임스페이스 마이그레이션 정합 + CLAUDE.md 변경 이력 1행
-3403cd4  chore: 네임스페이스 마이그레이션 마무리 — vite base + .private-config bump
-# (본 커밋 = 마이그레이션 closure 핸드오프 — CURRENT 롤링 + harness-state.md 1행)
+# 2026-09-06 오전 (develop)
+8a74be7 (submodule)     docs: README.md 네임스페이스 마이그레이션 정합 + CLAUDE.md 변경 이력 1행
+3403cd4                 chore: 네임스페이스 마이그레이션 마무리 — vite base + .private-config bump
+5ba815b                 docs: 네임스페이스 마이그레이션 완전 closure — CURRENT.md 롤링 + harness-state.md 1행
+
+# 2026-09-06 오후 (umbrella main = hongdosan/martial-arts)
+a55ad62 (umbrella)      chore: add martial-world as submodule (multi-module 편입 진입)
+
+# 본 커밋 = 우산 편입 사이클 closure (CURRENT 갱신 + harness-state.md 1행)
 ```
 
 ### 배포 인프라 상태 변경
@@ -54,6 +66,15 @@ e2b7fdc  docs: 네임스페이스 마이그레이션 부분 완료 핸드오프 
 - `release` 브랜치: `origin/develop` fast-forward push 로 develop 과 동기화 (bypass protected refs)
 - Workflow: `Deploy Vite + React to Pages` 성공 (34006608606 / 39s)
 - 배포 URL: https://hongdosan.github.io/martial-world/ (200 OK, HTML asset 경로 `/martial-world/` prefix)
+
+### 워킹 카피 위치 (2026-09-06 오후 변경)
+
+| 경로 | 상태 | 용도 |
+|---|---|---|
+| `~/hongdosan-workspace/martial-arts/martial-world/` | **✅ 권장** — 우산 저장소 submodule | 앞으로 모든 개발 여기서 |
+| `~/IdeaProjects/martial-world/` | ⚠️ *stale duplicate* — 현재 세션 cwd | 사용자 판단으로 삭제 or 유지 (동일 저장소 clone) |
+
+> 두 경로 모두 동일 `hongdosan/martial-world` 저장소 워킹 카피. push/pull 은 어디서 하든 원격 통해 sync. Bash cwd 무효화 방지 위해 현재 세션은 IdeaProjects 위치 유지, 다음 세션은 우산 하위 사용 권장.
 
 ### 신규 / 갱신 파일 (본 사이클 총괄)
 
@@ -96,7 +117,10 @@ e2b7fdc  docs: 네임스페이스 마이그레이션 부분 완료 핸드오프 
 
 ## Traps to Avoid
 
-- **`.private-config/martial-arts/README.md` 스텁 건드리지 X** — 별도 프로젝트 (`hongdosan/martial-arts` 우산) 예약 (M2)
+- **`.private-config/martial-arts/README.md` 스텁 건드리지 X** — 별도 프로젝트 (`hongdosan/martial-arts` 우산) 예약 (M2). *단 2026-09-06 부로 우산 저장소가 실제 활성화되었고 martial-world 를 submodule 로 참조 (M5). 스텁 README 는 여전히 우산 소유 — 우산 저장소 쪽에서 관리*
+- **우산 저장소 (`hongdosan/martial-arts`) 는 별도 프로젝트** — martial-world 는 submodule 참조되지만 소유는 우산 소유자. 우산의 `.gitmodules` / `settings.gradle` / `.idea/*` 등 파일은 우산 소유자 결정 (M5)
+- **`martial-world/backend/` Gradle 셋업 = Phase 3 도메인 식별 후** — 지금 우산에 `includeBuild('martial-world')` 추가 시 빌드 실패 (M7)
+- **`master` 룰셋 삭제 금지** — 봉인된 legacy 브랜치. 룰셋 삭제는 destructive/영구 (M6)
 - **`shared/` 를 `martial-world/` 아래로 옮기지 X** — c11f8e7 이동 scope 벗어남 (M3)
 - **release 브랜치 force push 금지** — fast-forward push 만 사용 (M4). release 는 항상 develop 조상이어야 함
 - **vision.md §5.1 헌법 위반 금지** — Phase 3 진입 시 *DB → 도메인* / *화면 → 도메인* 금지. 행위가 먼저
@@ -214,7 +238,10 @@ CLAUDE.md 에 이미 적힌 내용은 재기술 금지.
   · .private-config = 천기망 + H-eries 공유 저장소 (heries/ 폴더 = H-eries 자체 관리)
   · 격리 사전 방어 완료 (Serena ignored_paths / pull-first / 천기망 측 §1.1 / 서브모듈 README)
   · 천기망 측 작업 0
-  · 네임스페이스 마이그레이션 완전 closure (2026-09-06) — 배포 정상 (https://hongdosan.github.io/martial-world/ 200 OK)
+  · 네임스페이스 마이그레이션 완전 closure (2026-09-06 오전) — 배포 정상 (https://hongdosan.github.io/martial-world/ 200 OK)
+  · 우산 저장소 (hongdosan/martial-arts) submodule 편입 (2026-09-06 오후) — a55ad62 @ umbrella main
+  · 워킹 카피 권장 경로 = ~/hongdosan-workspace/martial-arts/martial-world/ (우산 하위)
+  · Gradle Composite Build 등록 (includeBuild) 은 backend/ Gradle 셋업 후 별도 사이클
 ```
 
 ## 참고
