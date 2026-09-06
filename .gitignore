@@ -11,6 +11,11 @@
 /frontend/build
 /frontend/dist
 
+# Gradle (settings.gradle 스켈레톤 — M8. build/ 캐시는 도메인 모듈 include 후 발생)
+/.gradle/
+/backend/**/build/
+/backend/**/.gradle/
+
 # env (frontend/.env 와 frontend/.env.example 는 공개 기본값/템플릿 — 커밋 대상)
 # 실제 개발·로컬 값은 아래 목록으로 차단 (비밀 유출 방지)
 /frontend/.env.local
